@@ -1,7 +1,9 @@
 text {
     font-family: sans-serif;
     font-size: 12px;
-    /*fill: white;*/
+    pointer-events: none;
+    fill: black;
+    font-weight: bold;
 }
 .axis path,
 .axis line {
@@ -19,10 +21,6 @@ g.arc path:hover {
 g.arc path {
     stroke: white;
     stroke-width: 3px;
-}
-text {
-    pointer-events: none;
-    fill: black;
 }
 #tooltip {
     position: absolute;
