@@ -1,8 +1,8 @@
 /**
  * 
  */
- var spie = spie || {};
-spie.Graph = function(data, config) {
+ var psd3 = psd3 || {};
+psd3.Graph = function(data, config) {
     this.data = data;
     this.config = config;
     this.defaults = {

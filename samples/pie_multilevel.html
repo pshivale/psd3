@@ -11,7 +11,7 @@
 </head>
 <body>
 
-<div id="sampleChartContainer"></div>
+<div id="chartContainer"></div>
 
 <script type="text/javascript">
 	var sampleData = [{
@@ -137,7 +137,7 @@
 	}];
 
 	var config = {
-	    containerId: "sampleChartContainer",
+	    containerId: "chartContainer",
 	    width: 500,
 	    height: 500,
 	    label: function(d) {
@@ -145,11 +145,11 @@
 	    },
 	    value: "population",
 	    tooltip: function(d) {
-	        return "Population of " + d.name + " is " + d.population;
+	        return "Population of " + d.name + " is " + d.population + " lacks.";
 	    }
 	};
 
-	var samplePie = new spie.Pie(sampleData, config);
+	var samplePie = new psd3.Pie(sampleData, config);
 </script>
 
 </body>
