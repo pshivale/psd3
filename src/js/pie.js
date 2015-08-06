@@ -4,8 +4,8 @@
  var psd3 = psd3 || {};
 psd3.Pie = function(data, config) {
     psd3.Graph.call(this, data, config);
-    this.drawPie(data);
     this.zoomStack = new Array();
+    this.drawPie(data);
 }
 
 psd3.Pie.prototype = Object.create(psd3.Graph.prototype);

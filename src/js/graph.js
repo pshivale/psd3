@@ -6,7 +6,6 @@ psd3.Graph = function(data, config) {
     this.data = data;
     this.config = config;
     this.defaults = {
-        _this: this,
         width: 400,
         height: 400,
         value: "value",
