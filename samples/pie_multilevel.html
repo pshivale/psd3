@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="../vendor/js/d3.js"></script>
+<script type="text/javascript" src="../psd3.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="../psd3.min.css"/>
+
+</head>
+<body>
+
+<div id="sampleChartContainer"></div>
+
+<script type="text/javascript">
+	var sampleData = [{
+	    population: 25,
+	    name: "Maharashtra",
+	    inner: [{
+	        population: 15,
+	        name: "Pune",
+	        inner: [{
+	            population: 10,
+	            name: "Yerawada",
+	            inner: []
+	        }, {
+	            population: 5,
+	            name: "Kothrud",
+	            inner: []
+	        }]
+	    }, {
+	        population: 10,
+	        name: "Mumbai",
+	        inner: [{
+	            population: 8,
+	            name: "Bandra",
+	            inner: []
+	        }, {
+	            population: 2,
+	            name: "Varali",
+	            inner: []
+	        }]
+	    }]
+	}, {
+	    population: 50,
+	    name: "Gujarat",
+	    inner: [{
+	        population: 20,
+	        name: "Surat",
+	        inner: [{
+	            population: 15,
+	            name: "Danti",
+	            inner: []
+	        }, {
+	            population: 5,
+	            name: "Hajira",
+	            inner: []
+	        }]
+	    }, {
+	        population: 30,
+	        name: "Rajkot",
+	        inner: [{
+	            population: 12,
+	            name: "Patan",
+	            inner: []
+	        }, {
+	            population: 18,
+	            name: "Modhera",
+	            inner: []
+	        }]
+	    }, {
+	        population: 4,
+	        name: "Godhra",
+	        inner: [{
+	            name: "Barda",
+	            population: 2,
+	            inner: []
+	        }, {
+	            name: "Porbandar",
+	            population: 2,
+	            inner: []
+	        }]
+	    }]
+	}, {
+	    population: 20,
+	    name: "MP",
+	    inner: [{
+	        population: 4,
+	        name: "Indore",
+	        inner: [{
+	            name: "Devas",
+	            population: 2,
+	            inner: []
+	        }, {
+	            name: "Dhar",
+	            population: 2,
+	            inner: []
+	        }]
+	    }, {
+	        population: 5,
+	        name: "Bhopal",
+	        inner: [{
+	            name: "Vidish",
+	            population: 3,
+	            inner: []
+	        }, {
+	            name: "Raisen",
+	            population: 2,
+	            inner: []
+	        }]
+	    }, {
+	        population: 8,
+	        name: "Ujjain",
+	        inner: [{
+	            name: "Shajapur",
+	            population: 2,
+	            inner: []
+	        }, {
+	            name: "Ratlam",
+	            population: 6,
+	            inner: []
+	        }]
+	    }, {
+	        population: 3,
+	        name: "Sachi",
+	        inner: [{
+	            name: "Sagar",
+	            population: 1,
+	            inner: []
+	        }, {
+	            name: "Ashoknagar",
+	            population: 2,
+	            inner: []
+	        }]
+	    }]
+	}];
+
+	var config = {
+	    containerId: "sampleChartContainer",
+	    width: 500,
+	    height: 500,
+	    label: function(d) {
+	        return d.name + ":" + d.population;
+	    },
+	    value: "population",
+	    tooltip: function(d) {
+	        return "Population of " + d.name + " is " + d.population;
+	    }
+	};
+
+	var samplePie = new spie.Pie(sampleData, config);
+</script>
+
+</body>
+</html>
