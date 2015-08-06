@@ -10,7 +10,7 @@ Simply add the `psd3` assets to your project and include them in your HTML.
 <script src="psd3.min.js"></script>
 ```
 
-*  `nv.d3.js` should appear after `d3.js` is included.
+*  `psd3.js` should appear after `d3.js` is included.
 * Prefer minified assets (`.min`) for production.
 
 ### Dependencies
