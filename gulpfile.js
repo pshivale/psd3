@@ -20,3 +20,11 @@ gulp.task('minJs', function() {
     .pipe(concat('psd3.min.js'))
     .pipe(gulp.dest('.'));
 });
+
+gulp.task('copyDemos', function() {
+  gulp.src('psd3.min.*', {base: "."})
+    .pipe(gulp.dest('../pshivale.github.io/psd3'));
+  gulp.src('samples/**/*', {base:"."})
+    .pipe(gulp.dest('../pshivale.github.io/psd3/'));
+
+});

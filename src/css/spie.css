@@ -3,7 +3,6 @@ text {
     font-size: 12px;
     pointer-events: none;
     fill: black;
-    font-weight: bold;
 }
 .axis path,
 .axis line {
