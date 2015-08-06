@@ -16,3 +16,7 @@ Simply add the `psd3` assets to your project and include them in your HTML.
 ### Dependencies
 
 psd3 should work with the latest [d3.js](http://d3js.org/) version 3.5.3 and later.
+
+### Demos
+
+http://pshivale.github.io/psd3/index.html
