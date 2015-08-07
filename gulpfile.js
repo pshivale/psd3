@@ -16,7 +16,7 @@ gulp.task('minCss', function() {
 
 gulp.task('minJs', function() {
   return gulp.src('src/js/*.js')
-    //.pipe(uglify())
+    .pipe(uglify())
     .pipe(concat('psd3.min.js'))
     .pipe(gulp.dest('.'));
 });

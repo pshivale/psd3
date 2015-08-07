@@ -15,122 +15,122 @@
 
 <script type="text/javascript">
 	var sampleData = [{
-	    population: 25,
-	    name: "Maharashtra",
+	    noOfColleges: 25,
+	    place: "Maharashtra",
 	    inner: [{
-	        population: 15,
-	        name: "Pune",
+	        noOfColleges: 15,
+	        place: "Pune",
 	        inner: [{
-	            population: 10,
-	            name: "Yerawada",
+	            noOfColleges: 10,
+	            place: "Yerawada",
 	            inner: []
 	        }, {
-	            population: 5,
-	            name: "Kothrud",
+	            noOfColleges: 5,
+	            place: "Kothrud",
 	            inner: []
 	        }]
 	    }, {
-	        population: 10,
-	        name: "Mumbai",
+	        noOfColleges: 10,
+	        place: "Mumbai",
 	        inner: [{
-	            population: 8,
-	            name: "Bandra",
+	            noOfColleges: 8,
+	            place: "Bandra",
 	            inner: []
 	        }, {
-	            population: 2,
-	            name: "Varali",
+	            noOfColleges: 2,
+	            place: "Varali",
 	            inner: []
 	        }]
 	    }]
 	}, {
-	    population: 50,
-	    name: "Gujarat",
+	    noOfColleges: 50,
+	    place: "Gujarat",
 	    inner: [{
-	        population: 20,
-	        name: "Surat",
+	        noOfColleges: 20,
+	        place: "Surat",
 	        inner: [{
-	            population: 15,
-	            name: "Danti",
+	            noOfColleges: 15,
+	            place: "Danti",
 	            inner: []
 	        }, {
-	            population: 5,
-	            name: "Hajira",
+	            noOfColleges: 5,
+	            place: "Hajira",
 	            inner: []
 	        }]
 	    }, {
-	        population: 30,
-	        name: "Rajkot",
+	        noOfColleges: 30,
+	        place: "Rajkot",
 	        inner: [{
-	            population: 12,
-	            name: "Patan",
+	            noOfColleges: 12,
+	            place: "Patan",
 	            inner: []
 	        }, {
-	            population: 18,
-	            name: "Modhera",
+	            noOfColleges: 18,
+	            place: "Modhera",
 	            inner: []
 	        }]
 	    }, {
-	        population: 4,
-	        name: "Godhra",
+	        noOfColleges: 4,
+	        place: "Godhra",
 	        inner: [{
-	            name: "Barda",
-	            population: 2,
+	            place: "Barda",
+	            noOfColleges: 2,
 	            inner: []
 	        }, {
-	            name: "Porbandar",
-	            population: 2,
+	            place: "Porbandar",
+	            noOfColleges: 2,
 	            inner: []
 	        }]
 	    }]
 	}, {
-	    population: 20,
-	    name: "MP",
+	    noOfColleges: 20,
+	    place: "MP",
 	    inner: [{
-	        population: 4,
-	        name: "Indore",
+	        noOfColleges: 4,
+	        place: "Indore",
 	        inner: [{
-	            name: "Devas",
-	            population: 2,
+	            place: "Devas",
+	            noOfColleges: 2,
 	            inner: []
 	        }, {
-	            name: "Dhar",
-	            population: 2,
+	            place: "Dhar",
+	            noOfColleges: 2,
 	            inner: []
 	        }]
 	    }, {
-	        population: 5,
-	        name: "Bhopal",
+	        noOfColleges: 5,
+	        place: "Bhopal",
 	        inner: [{
-	            name: "Vidish",
-	            population: 3,
+	            place: "Vidish",
+	            noOfColleges: 3,
 	            inner: []
 	        }, {
-	            name: "Raisen",
-	            population: 2,
+	            place: "Raisen",
+	            noOfColleges: 2,
 	            inner: []
 	        }]
 	    }, {
-	        population: 8,
-	        name: "Ujjain",
+	        noOfColleges: 8,
+	        place: "Ujjain",
 	        inner: [{
-	            name: "Shajapur",
-	            population: 2,
+	            place: "Shajapur",
+	            noOfColleges: 2,
 	            inner: []
 	        }, {
-	            name: "Ratlam",
-	            population: 6,
+	            place: "Ratlam",
+	            noOfColleges: 6,
 	            inner: []
 	        }]
 	    }, {
-	        population: 3,
-	        name: "Sachi",
+	        noOfColleges: 3,
+	        place: "Sachi",
 	        inner: [{
-	            name: "Sagar",
-	            population: 1,
+	            place: "Sagar",
+	            noOfColleges: 1,
 	            inner: []
 	        }, {
-	            name: "Ashoknagar",
-	            population: 2,
+	            place: "Ashoknagar",
+	            noOfColleges: 2,
 	            inner: []
 	        }]
 	    }]
@@ -141,14 +141,15 @@
 	    width: 500,
 	    height: 500,
 	    label: function(d) {
-	        return d.name + ":" + d.population;
+	        return d.place + ":" + d.noOfColleges;
 	    },
-	    value: "population",
+	    value: "noOfColleges",
 	    tooltip: function(d) {
 	        return "<ul><li>Double click a section to drill down!</li>"
 	        		+"<li>Double click center section to drill back up!</li></ul>"
-	        		+ "<p>Population of " + d.name + " is " + d.population + " lacks.</p>";
-	    }
+	        		+ "<p>There are " + d.noOfColleges + " colleges in " + d.place + ".</p>";
+	    },
+	    transitionDuration: 1500
 	};
 
 	var samplePie = new psd3.Pie(sampleData, config);
