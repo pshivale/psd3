@@ -130,14 +130,18 @@ psd3.Pie.prototype.drawPie = function(dataset) {
     pie.sort(null);
 
     var outerRadius = width / 2;
-    var innerRadius = 0;
     var depth = this.getDepth(dataset);
 
     var prevDsLength = 0;
     for (var i = depth; i >= 1; i--) {
-        var outRad = outerRadius / 3 * i;
-        var inRad = outRad - outerRadius / 3;
+        //console.log("i = " + i);
+        var outRad = donutRadius + (((outerRadius-donutRadius) / depth) * i);
         //console.log("outRad = " + outRad);
+        var inRad = outRad - outerRadius / depth;
+        //console.log("inRad = " + inRad);
+        if(i==1){
+            inRad = donutRadius;
+        }
         var arc = d3.svg.arc().innerRadius(inRad)
             .outerRadius(outRad);
         //Set up groups

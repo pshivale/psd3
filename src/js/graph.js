@@ -19,6 +19,7 @@ psd3.Graph = function(config) {
             }
 
         },
-        transitionDuration: 1000
+        transitionDuration: 1000,
+        donutRadius: 0
     }
 }
