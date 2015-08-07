@@ -1,6 +1,6 @@
 ## psd3 - Charts based on d3.js
 
-Inspired by the frustration that no free charting library provides multilevel pie chart!
+Javascript pie chart library based on d3.js that supports multi-level pie and donut charts.
 
 ## Usage
 Simply add the `psd3` assets to your project and include them in your HTML.
