@@ -4,7 +4,20 @@ var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
 var concat = require('gulp-concat');
 
-gulp.task('default', ['minCss','minJs']);
+gulp.task('default', ['maxCss','maxJs','minCss','minJs']);
+
+gulp.task('maxCss', function() {
+  gulp.src('src/css/*.css')
+        .pipe(concat('psd3.css'))
+        .pipe(gulp.dest('.'));
+});
+
+
+gulp.task('maxJs', function() {
+  return gulp.src('src/js/*.js')
+    .pipe(concat('psd3.js'))
+    .pipe(gulp.dest('.'));
+});
 
 gulp.task('minCss', function() {
   gulp.src('src/css/*.css')
