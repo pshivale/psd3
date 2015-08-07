@@ -140,6 +140,11 @@
 	    containerId: "chartContainer",
 	    width: 500,
 	    height: 500,
+	    data: sampleData,
+	    heading: {
+	    	text: "Medical Colleges in India",
+	    	pos: "top"
+	    },
 	    label: function(d) {
 	        return d.place + ":" + d.noOfColleges;
 	    },
@@ -147,12 +152,13 @@
 	    tooltip: function(d) {
 	        return "<ul><li>Double click a section to drill down!</li>"
 	        		+"<li>Double click center section to drill back up!</li></ul>"
-	        		+ "<p>There are " + d.noOfColleges + " colleges in " + d.place + ".</p>";
+	        		+ "<p>There are " + d.noOfColleges + " medical colleges in " + d.place + ".</p>";
 	    },
-	    transitionDuration: 1500
+	    transitionDuration: 1200,
+	    donutRadius: 50
 	};
 
-	var samplePie = new psd3.Pie(sampleData, config);
+	var samplePie = new psd3.Pie(config);
 </script>
 
 </body>

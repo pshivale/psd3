@@ -1,16 +1,40 @@
 /**
  * 
  */
- var psd3 = psd3 || {};
-psd3.Pie = function(data, config) {
-    psd3.Graph.call(this, data, config);
+var psd3 = psd3 || {};
+
+psd3.Pie = function(config) {
+    psd3.Graph.call(this, config);
     this.zoomStack = new Array();
-    this.drawPie(data);
+    var pos = "top";
+    if(this.config.heading !== undefined && this.config.heading.pos !== undefined){
+        pos = this.config.heading.pos;
+    }
+    if(pos=="top"){
+        this.setHeading();    
+    }
+    this.drawPie(config.data);
+    if(pos=="bottom"){
+        this.setHeading();    
+    }
 }
 
 psd3.Pie.prototype = Object.create(psd3.Graph.prototype);
 
 psd3.Pie.prototype.constructor = psd3.Pie;
+
+psd3.Pie.prototype.setHeading = function(){
+    if(this.config.heading !== undefined){
+        d3.select("#"+this.config.containerId)
+            .append("div")
+            .style("text-align","center")
+            .style("width", ""+this.config.width+"px")
+            .style("padding-top","20px")
+            .style("padding-bottom","20px")
+            .append("strong")
+            .text(this.config.heading.text);
+    }
+}
 
 psd3.Pie.prototype.getDepth = function(dset) {
     //console.log("ds = " + ds);
@@ -44,7 +68,7 @@ psd3.Pie.prototype.setDataSet = function(dset, depthneeded, currentDepth, ds) {
 }
 psd3.Pie.prototype.drawPie = function(dataset) {
     var object = this;
-    var width, height, transitionDuration, value, label, tooltip;
+    var width, height, transitionDuration, value, label, tooltip, donutRadius;
     if (config.width !== undefined) {
         width = config.width;
     } else {
@@ -74,6 +98,11 @@ psd3.Pie.prototype.drawPie = function(dataset) {
         tooltip = config.tooltip;
     } else {
         tooltip = this.defaults.tooltip;
+    }
+    if (config.donutRadius !== undefined) {
+        donutRadius = config.donutRadius;
+    } else {
+        donutRadius = this.defaults.donutRadius;
     }
 
     var arcsArray = [];

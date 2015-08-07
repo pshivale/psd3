@@ -2,8 +2,7 @@
  * 
  */
  var psd3 = psd3 || {};
-psd3.Graph = function(data, config) {
-    this.data = data;
+psd3.Graph = function(config) {
     this.config = config;
     this.defaults = {
         width: 400,
