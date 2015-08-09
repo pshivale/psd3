@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <title>psd3 - Multi-level Pie Chart</title>
 <script type="text/javascript" src="../vendor/js/d3.js"></script>
-<script type="text/javascript" src="../psd3.min.js"></script>
+<script type="text/javascript" src="../psd3.js"></script>
 
-<link rel="stylesheet" type="text/css" href="../psd3.min.css"/>
+<link rel="stylesheet" type="text/css" href="../psd3.css"/>
 
 </head>
 <body>
@@ -17,121 +17,121 @@
 	var sampleData = [{
 	    noOfColleges: 25,
 	    place: "Maharashtra",
-	    inner: [{
+	    drilldown: [{
 	        noOfColleges: 15,
 	        place: "Pune",
-	        inner: [{
+	        drilldown: [{
 	            noOfColleges: 10,
 	            place: "Yerawada",
-	            inner: []
+	            drilldown: []
 	        }, {
 	            noOfColleges: 5,
 	            place: "Kothrud",
-	            inner: []
+	            drilldown: []
 	        }]
 	    }, {
 	        noOfColleges: 10,
 	        place: "Mumbai",
-	        inner: [{
+	        drilldown: [{
 	            noOfColleges: 8,
 	            place: "Bandra",
-	            inner: []
+	            drilldown: []
 	        }, {
 	            noOfColleges: 2,
 	            place: "Varali",
-	            inner: []
+	            drilldown: []
 	        }]
 	    }]
 	}, {
 	    noOfColleges: 50,
 	    place: "Gujarat",
-	    inner: [{
+	    drilldown: [{
 	        noOfColleges: 20,
 	        place: "Surat",
-	        inner: [{
+	        drilldown: [{
 	            noOfColleges: 15,
 	            place: "Danti",
-	            inner: []
+	            drilldown: []
 	        }, {
 	            noOfColleges: 5,
 	            place: "Hajira",
-	            inner: []
+	            drilldown: []
 	        }]
 	    }, {
 	        noOfColleges: 30,
 	        place: "Rajkot",
-	        inner: [{
+	        drilldown: [{
 	            noOfColleges: 12,
 	            place: "Patan",
-	            inner: []
+	            drilldown: []
 	        }, {
 	            noOfColleges: 18,
 	            place: "Modhera",
-	            inner: []
+	            drilldown: []
 	        }]
 	    }, {
 	        noOfColleges: 4,
 	        place: "Godhra",
-	        inner: [{
+	        drilldown: [{
 	            place: "Barda",
 	            noOfColleges: 2,
-	            inner: []
+	            drilldown: []
 	        }, {
 	            place: "Porbandar",
 	            noOfColleges: 2,
-	            inner: []
+	            drilldown: []
 	        }]
 	    }]
 	}, {
 	    noOfColleges: 20,
 	    place: "MP",
-	    inner: [{
+	    drilldown: [{
 	        noOfColleges: 4,
 	        place: "Indore",
-	        inner: [{
+	        drilldown: [{
 	            place: "Devas",
 	            noOfColleges: 2,
-	            inner: []
+	            drilldown: []
 	        }, {
 	            place: "Dhar",
 	            noOfColleges: 2,
-	            inner: []
+	            drilldown: []
 	        }]
 	    }, {
 	        noOfColleges: 5,
 	        place: "Bhopal",
-	        inner: [{
+	        drilldown: [{
 	            place: "Vidish",
 	            noOfColleges: 3,
-	            inner: []
+	            drilldown: []
 	        }, {
 	            place: "Raisen",
 	            noOfColleges: 2,
-	            inner: []
+	            drilldown: []
 	        }]
 	    }, {
 	        noOfColleges: 8,
 	        place: "Ujjain",
-	        inner: [{
+	        drilldown: [{
 	            place: "Shajapur",
 	            noOfColleges: 2,
-	            inner: []
+	            drilldown: []
 	        }, {
 	            place: "Ratlam",
 	            noOfColleges: 6,
-	            inner: []
+	            drilldown: []
 	        }]
 	    }, {
 	        noOfColleges: 3,
 	        place: "Sachi",
-	        inner: [{
+	        drilldown: [{
 	            place: "Sagar",
 	            noOfColleges: 1,
-	            inner: []
+	            drilldown: []
 	        }, {
 	            place: "Ashoknagar",
 	            noOfColleges: 2,
-	            inner: []
+	            drilldown: []
 	        }]
 	    }]
 	}];
@@ -149,6 +149,7 @@
 	        return d.place + ":" + d.noOfColleges;
 	    },
 	    value: "noOfColleges",
+	    inner: "drilldown",
 	    tooltip: function(d) {
 	        return "<ul><li>Double click a section to drill down!</li>"
 	        		+"<li>Double click center section to drill back up!</li></ul>"

@@ -41,9 +41,9 @@ psd3.Pie.prototype.getDepth = function(dset) {
     var ds = dset[0];
     var depth = 0;
     while (ds != null || ds !== undefined) {
-        //console.log("ds.inner = " + ds.inner);
+        //console.log("ds[this.config.inner] = " + ds[this.config.inner]);
         //console.log("depth = " + depth);
-        ds = ds.inner[0];
+        ds = ds[this.config.inner][0];
         //console.log("ds = " + ds);
         depth++;
     }
@@ -61,50 +61,13 @@ psd3.Pie.prototype.setDataSet = function(dset, depthneeded, currentDepth, ds) {
         return ds;
     } else {
         for (var i = 0; i < dset.length; i++) {
-            ds = this.setDataSet(dset[i].inner, depthneeded, currentDepth + 1, ds);
+            ds = this.setDataSet(dset[i][this.config.inner], depthneeded, currentDepth + 1, ds);
         }
         return ds;
     }
 }
 psd3.Pie.prototype.drawPie = function(dataset) {
     var object = this;
-    var width, height, transitionDuration, value, label, tooltip, donutRadius;
-    if (config.width !== undefined) {
-        width = config.width;
-    } else {
-        width = this.defaults.width;
-    }
-    if (config.height !== undefined) {
-        height = config.height;
-    } else {
-        height = this.defaults.height;
-    }
-    if (config.transitionDuration !== undefined) {
-        transitionDuration = config.transitionDuration;
-    } else {
-        transitionDuration = this.defaults.transitionDuration;
-    }
-    if (config.value !== undefined) {
-        value = config.value;
-    } else {
-        value = this.defaults.value;
-    }
-    if (config.label !== undefined) {
-        label = config.label;
-    } else {
-        label = this.defaults.label;
-    }
-    if (config.tooltip !== undefined) {
-        tooltip = config.tooltip;
-    } else {
-        tooltip = this.defaults.tooltip;
-    }
-    if (config.donutRadius !== undefined) {
-        donutRadius = config.donutRadius;
-    } else {
-        donutRadius = this.defaults.donutRadius;
-    }
-
     var arcsArray = [];
     //Easy colors accessible via a 10-step ordinal scale
     var color = d3.scale.category20();
@@ -113,8 +76,8 @@ psd3.Pie.prototype.drawPie = function(dataset) {
     var svg = d3.select("#"+object.config.containerId)
         .append("svg")
         .attr("id", object.config.containerId+"_svg")
-        .attr("width", width)
-        .attr("height", height);
+        .attr("width", object.config.width)
+        .attr("height", object.config.height);
     var tooltipDiv = d3.select("#"+object.config.containerId).append("div")
         .attr("id", tooltipId)
         .attr("class", "psd3Hidden psd3Tooltip");
@@ -125,22 +88,22 @@ psd3.Pie.prototype.drawPie = function(dataset) {
 
     var pie = d3.layout.pie();
     pie.value(function(d) {
-        return d[value];
+        return d[object.config.value];
     });
     pie.sort(null);
 
-    var outerRadius = width / 2;
+    var outerRadius = object.config.width / 2;
     var depth = this.getDepth(dataset);
 
     var prevDsLength = 0;
     for (var i = depth; i >= 1; i--) {
         //console.log("i = " + i);
-        var outRad = donutRadius + (((outerRadius-donutRadius) / depth) * i);
+        var outRad = object.config.donutRadius + (((outerRadius-object.config.donutRadius) / depth) * i);
         //console.log("outRad = " + outRad);
         var inRad = outRad - outerRadius / depth;
         //console.log("inRad = " + inRad);
         if(i==1){
-            inRad = donutRadius;
+            inRad = object.config.donutRadius;
         }
         var arc = d3.svg.arc().innerRadius(inRad)
             .outerRadius(outRad);
@@ -170,7 +133,7 @@ psd3.Pie.prototype.drawPie = function(dataset) {
                 .style("left", d3.event.clientX + "px")
                 .style("top", d3.event.clientY + "px")
                 .select("#value")
-                .html(tooltip(d.data, label));
+                .html(object.config.tooltip(d.data, object.config.label));
             d3.select("#" + tooltipId).classed("psd3Hidden", false);
         });
 
@@ -186,7 +149,7 @@ psd3.Pie.prototype.drawPie = function(dataset) {
 
         paths
             .transition()
-            .duration(transitionDuration)
+            .duration(object.config.transitionDuration)
             .ease("linear")
             .attrTween("d", function(d) {
                 var start = {
@@ -208,16 +171,16 @@ psd3.Pie.prototype.drawPie = function(dataset) {
         arcsArray[i].append("text")
             .transition()
             .ease("linear")
-            .duration(transitionDuration)
-            .delay(transitionDuration)
+            .duration(object.config.transitionDuration)
+            .delay(object.config.transitionDuration)
             .attr("transform", function(d) {
                 return "translate(" + d.arc.centroid(d) + ")";
             }).attr("text-anchor", "middle")
             .text(function(d) {
-                return label(d.data);
+                return object.config.label(d.data);
             })
             .attr("title", function(d) {
-                return d.data[value];
+                return d.data[object.config.value];
             });
     }
 
