@@ -22,7 +22,7 @@ psd3.Graph = function(config) {
         },
         transitionDuration: 1000,
         donutRadius: 0
-    }
+    };
     /*console.log("before defaults");
     for(var property in config){
         console.log(property);
@@ -38,4 +38,4 @@ psd3.Graph = function(config) {
     for(var property in config){
         console.log(property);
     }*/
-}
+};

@@ -5,7 +5,7 @@ var psd3 = psd3 || {};
 
 psd3.Pie = function(config) {
     psd3.Graph.call(this, config);
-    this.zoomStack = new Array();
+    this.zoomStack = [];
     var pos = "top";
     if(this.config.heading !== undefined && this.config.heading.pos !== undefined){
         pos = this.config.heading.pos;
@@ -17,7 +17,7 @@ psd3.Pie = function(config) {
     if(pos=="bottom"){
         this.setHeading();    
     }
-}
+};
 
 psd3.Pie.prototype = Object.create(psd3.Graph.prototype);
 
@@ -34,7 +34,7 @@ psd3.Pie.prototype.setHeading = function(){
             .append("strong")
             .text(this.config.heading.text);
     }
-}
+};
 
 psd3.Pie.prototype.getDepth = function(dset) {
     //console.log("ds = " + ds);
@@ -49,7 +49,7 @@ psd3.Pie.prototype.getDepth = function(dset) {
     }
     //console.log("depth = " + depth);
     return depth;
-}
+};
 
 psd3.Pie.prototype.setDataSet = function(dset, depthneeded, currentDepth, ds) {
     if (dset === null || dset === undefined) return ds;
@@ -60,12 +60,13 @@ psd3.Pie.prototype.setDataSet = function(dset, depthneeded, currentDepth, ds) {
         }
         return ds;
     } else {
-        for (var i = 0; i < dset.length; i++) {
-            ds = this.setDataSet(dset[i][this.config.inner], depthneeded, currentDepth + 1, ds);
+        for (var j = 0; j < dset.length; j++) {
+            ds = this.setDataSet(dset[j][this.config.inner], depthneeded, currentDepth + 1, ds);
         }
         return ds;
     }
-}
+};
+
 psd3.Pie.prototype.drawPie = function(dataset) {
     var object = this;
     var arcsArray = [];
@@ -96,6 +97,38 @@ psd3.Pie.prototype.drawPie = function(dataset) {
     var depth = this.getDepth(dataset);
 
     var prevDsLength = 0;
+    var dblclick = function(d) {
+        object.reDrawPie(d, ds);
+    };
+    var arcfill = function(d, i) {
+        return color(i + prevDsLength);
+    };
+    var mouseover = function(d) {
+        d3.select("#"+tooltipId)
+            .style("left", d3.event.clientX + "px")
+            .style("top", d3.event.clientY + "px")
+            .select("#value")
+            .html(object.config.tooltip(d.data, object.config.label));
+        d3.select("#" + tooltipId).classed("psd3Hidden", false);
+    };
+    var mouseout = function() {
+        d3.select("#" + tooltipId).classed("psd3Hidden", true);
+    };
+    var storeMetadataWithArc = function(d) {
+        d.arc = arc;
+        d.length = ds.length;
+        d.parentDs = ds;
+    };
+    var customArcTween = function(d) {
+        var start = {
+            startAngle: 0,
+            endAngle: 0
+        };
+        var interpolate = d3.interpolate(start, d);
+        return function(t) {
+            return d.arc(interpolate(t));
+        };
+    };
     for (var i = depth; i >= 1; i--) {
         //console.log("i = " + i);
         var outRad = object.config.donutRadius + (((outerRadius-object.config.donutRadius) / depth) * i);
@@ -119,72 +152,50 @@ psd3.Pie.prototype.drawPie = function(dataset) {
             .attr("class", "arc " + clazz)
             .attr("transform",
                 "translate(" + outerRadius + "," + outerRadius + ")")
-            .on("dblclick", function(d) {
-                object.reDrawPie(d, ds);
-            });;
+            .on("dblclick", dblclick);
 
         //Draw arc paths
-        paths = arcs.append("path").attr("fill", function(d, i) {
-            return color(i + prevDsLength);
-        });
+        paths = arcs.append("path").attr("fill", arcfill);
 
-        paths.on("mouseover", function(d) {
-            d3.select("#"+tooltipId)
-                .style("left", d3.event.clientX + "px")
-                .style("top", d3.event.clientY + "px")
-                .select("#value")
-                .html(object.config.tooltip(d.data, object.config.label));
-            d3.select("#" + tooltipId).classed("psd3Hidden", false);
-        });
+        paths.on("mouseover", mouseover);
 
-        paths.on("mouseout", function() {
-            d3.select("#" + tooltipId).classed("psd3Hidden", true);
-        })
+        paths.on("mouseout", mouseout);
 
-        paths.each(function(d) {
-            d.arc = arc;
-            d.length = ds.length;
-            d.parentDs = ds;
-        });
+        paths.each(storeMetadataWithArc);
 
         paths
             .transition()
             .duration(object.config.transitionDuration)
             .ease("linear")
-            .attrTween("d", function(d) {
-                var start = {
-                    startAngle: 0,
-                    endAngle: 0
-                };
-                var interpolate = d3.interpolate(start, d);
-                return function(t) {
-                    return d.arc(interpolate(t));
-                };
-            });
+            .attrTween("d", customArcTween);
         prevDsLength += ds.length;
 
         arcsArray[i] = arcs;
     }
 
-    for (var i = 1; i <= depth; i++) {
+    var textTransform = function(d) {
+        return "translate(" + d.arc.centroid(d) + ")";
+    };
+    var textText = function(d) {
+        return object.config.label(d.data);
+    };
+    var textTitle = function(d) {
+        return d.data[object.config.value];
+    };
+    for (var k = 1; k <= depth; k++) {
         //Labels
-        arcsArray[i].append("text")
+        arcsArray[k].append("text")
             .transition()
             .ease("linear")
             .duration(object.config.transitionDuration)
             .delay(object.config.transitionDuration)
-            .attr("transform", function(d) {
-                return "translate(" + d.arc.centroid(d) + ")";
-            }).attr("text-anchor", "middle")
-            .text(function(d) {
-                return object.config.label(d.data);
-            })
-            .attr("title", function(d) {
-                return d.data[object.config.value];
-            });
+            .attr("transform", textTransform)
+            .attr("text-anchor", "middle")
+            .text(textText)
+            .attr("title", textTitle);
     }
 
-}
+};
 
 psd3.Pie.prototype.reDrawPie = function(d, ds) {
     var tmp = [];
@@ -197,4 +208,4 @@ psd3.Pie.prototype.reDrawPie = function(d, ds) {
         this.zoomStack.push(ds);
     }
     this.drawPie(tmp);
-}
+};
