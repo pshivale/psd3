@@ -21,8 +21,9 @@ psd3.Graph = function(config) {
             }
 
         },
+        transition: "linear",
         transitionDuration: 1000,
-        donutRadius: 0
+        donutRadius: 0,
     };
     /*console.log("before defaults");
     for(var property in config){

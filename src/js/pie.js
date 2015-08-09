@@ -166,7 +166,7 @@ psd3.Pie.prototype.drawPie = function(dataset) {
         paths
             .transition()
             .duration(object.config.transitionDuration)
-            .ease("linear")
+            .ease(object.config.transition)
             .attrTween("d", customArcTween);
         prevDsLength += ds.length;
 
@@ -186,7 +186,7 @@ psd3.Pie.prototype.drawPie = function(dataset) {
         //Labels
         arcsArray[k].append("text")
             .transition()
-            .ease("linear")
+            .ease(object.config.transition)
             .duration(object.config.transitionDuration)
             .delay(object.config.transitionDuration)
             .attr("transform", textTransform)
