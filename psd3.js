@@ -3,6 +3,7 @@
  */
  var psd3 = psd3 || {};
 psd3.Graph = function(config) {
+    var _this = this;
     this.config = config;
     this.defaults = {
         width: 400,
@@ -13,10 +14,10 @@ psd3.Graph = function(config) {
             return d.label;
         },
         tooltip: function(d) {
-            if (this.config.label !== undefined) {
-                return this.config.label(d);
+            if (_this.config.value !== undefined) {
+                return d[_this.config.value];
             } else {
-                return d.label;
+                return d.value;
             }
 
         },
@@ -78,14 +79,14 @@ psd3.Pie.prototype.setHeading = function(){
 };
 
 psd3.Pie.prototype.getDepth = function(dset) {
-    console.log("ds = " + ds);
+    //console.log("ds = " + ds);
     var ds = dset[0];
-    var depth = 0;
-    while (ds !== null && ds !== undefined) {
-        console.log("ds[this.config.inner] = " + ds[this.config.inner]);
-        console.log("depth = " + depth);
+    var depth = 1;
+    while (ds !== null && ds !== undefined && ds[this.config.inner] !== undefined && ds[this.config.inner].length > 0) {
+        //console.log("ds[this.config.inner] = " + ds[this.config.inner]);
+        //console.log("depth = " + depth);
         ds = ds[this.config.inner][0];
-        console.log("ds = " + ds);
+        //console.log("ds = " + ds);
         depth++;
     }
     //console.log("depth = " + depth);

@@ -37,14 +37,14 @@ psd3.Pie.prototype.setHeading = function(){
 };
 
 psd3.Pie.prototype.getDepth = function(dset) {
-    console.log("ds = " + ds);
+    //console.log("ds = " + ds);
     var ds = dset[0];
-    var depth = 0;
-    while (ds !== null && ds !== undefined) {
-        console.log("ds[this.config.inner] = " + ds[this.config.inner]);
-        console.log("depth = " + depth);
+    var depth = 1;
+    while (ds !== null && ds !== undefined && ds[this.config.inner] !== undefined && ds[this.config.inner].length > 0) {
+        //console.log("ds[this.config.inner] = " + ds[this.config.inner]);
+        //console.log("depth = " + depth);
         ds = ds[this.config.inner][0];
-        console.log("ds = " + ds);
+        //console.log("ds = " + ds);
         depth++;
     }
     //console.log("depth = " + depth);

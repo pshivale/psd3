@@ -3,6 +3,7 @@
  */
  var psd3 = psd3 || {};
 psd3.Graph = function(config) {
+    var _this = this;
     this.config = config;
     this.defaults = {
         width: 400,
@@ -13,10 +14,10 @@ psd3.Graph = function(config) {
             return d.label;
         },
         tooltip: function(d) {
-            if (this.config.label !== undefined) {
-                return this.config.label(d);
+            if (_this.config.value !== undefined) {
+                return d[_this.config.value];
             } else {
-                return d.label;
+                return d.value;
             }
 
         },
