@@ -17,15 +17,19 @@ psd3 should work with the latest [d3.js](http://d3js.org/) version 3.5.3 and lat
 <!doctype html>
 <html>
 <head>
+	<!-- include d3.js dependancy -->
+	<script type="text/javascript" src="d3.js"></script>
+	
+	<!-- include psd3 dependancies -->
     <link rel="stylesheet" type="text/css" href="psd3.css"/>
-    <script type="text/javascript" src="d3.js"></script>
     <script type="text/javascript" src="psd3.js"></script>
 </head>
 <body>
-
+	<!-- Container for the chart -->
   <div id="chartContainer"></div>
 
   <script type="text/javascript">
+  	// Create config 
   	var config = {
   		containerId: "chartContainer",
   		data: [{
@@ -51,6 +55,7 @@ psd3 should work with the latest [d3.js](http://d3js.org/) version 3.5.3 and lat
   		}],
   	};
   
+  // Draw chart
 	var samplePie = new psd3.Pie(config);
 </script>
 
@@ -84,17 +89,21 @@ psd3 should work with the latest [d3.js](http://d3js.org/) version 3.5.3 and lat
 	},
 	
 	// labels shown in the graph. Data object is available as d.
+	// default label is the "label" field
 	label: function(d) {
 	    return d.place + ":" + d.noOfColleges;
 	},
 	
 	// field to be used as value in graph
+	// default field name assumed is "value"
 	value: "noOfColleges",
 	
 	// field to be used as nested data for multi-level pie chart
+	// default field name assumed is "inner"
 	inner: "drilldown",
 	
 	// tooltip shown for the graph sections. Data object is available as d.
+	// default tooltip is the "value" field
 	tooltip: function(d) {
 	    return "<p>There are " + d.noOfColleges + " medical colleges in " + d.place + ".</p>";
 	},
