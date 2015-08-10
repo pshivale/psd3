@@ -2,21 +2,57 @@
 
 Javascript pie chart library based on d3.js that supports multi-level pie and donut charts.
 
-## Usage
-Simply add the `psd3` assets to your project and include them in your HTML.
+### Demos
 
-```
-<link href="psd3.min.css" rel="stylesheet">
-<script src="psd3.min.js"></script>
-```
-
-*  `psd3.js` should appear after `d3.js` is included.
-* Prefer minified assets (`.min`) for production.
+http://pshivale.github.io/psd3/index.html
 
 ### Dependencies
 
 psd3 should work with the latest [d3.js](http://d3js.org/) version 3.5.3 and later.
 
-### Demos
+## Usage
+Sample HTML.
+```html
+<!doctype html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="psd3.css"/>
+    <script type="text/javascript" src="d3.js"></script>
+    <script type="text/javascript" src="psd3.js"></script>
+</head>
+<body>
 
-http://pshivale.github.io/psd3/index.html
+  <div id="chartContainer"></div>
+
+  <script type="text/javascript">
+  	var config = {
+  		containerId: "chartContainer",
+  		data: [{
+  		    value: 25,
+  		    label: "Maharashtra",
+  		    inner: [{
+  		        value: 15,
+  		        label: "Pune"
+  		    }, {
+  		        value: 10,
+  		        label: "Mumbai"
+  		    }]
+  		}, {
+  		    value: 50,
+  		    label: "Gujarat",
+  		    inner: [{
+  		        value: 20,
+  		        label: "Surat"
+  		    }, {
+  		        value: 30,
+  		        label: "Rajkot"
+  		    }]
+  		}],
+  	};
+  
+	var samplePie = new psd3.Pie(config);
+</script>
+
+</body>
+</html>
+```
