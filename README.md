@@ -26,38 +26,38 @@ psd3 should work with the latest [d3.js](http://d3js.org/) version 3.5.3 and lat
 </head>
 <body>
 	<!-- Container for the chart -->
-  <div id="chartContainer"></div>
+	<div id="chartContainer"></div>
 
-  <script type="text/javascript">
-  	// Create config 
-  	var config = {
-  		containerId: "chartContainer",
-  		data: [{
-  		    value: 25,
-  		    label: "Maharashtra",
-  		    inner: [{
-  		        value: 15,
-  		        label: "Pune"
-  		    }, {
-  		        value: 10,
-  		        label: "Mumbai"
-  		    }]
-  		}, {
-  		    value: 50,
-  		    label: "Gujarat",
-  		    inner: [{
-  		        value: 20,
-  		        label: "Surat"
-  		    }, {
-  		        value: 30,
-  		        label: "Rajkot"
-  		    }]
-  		}],
-  	};
-  
-  // Draw chart
-	var samplePie = new psd3.Pie(config);
-</script>
+	<script type="text/javascript">
+	  	// Create config 
+	  	var config = {
+	  		containerId: "chartContainer",
+	  		data: [{
+	  		    value: 25,
+	  		    label: "Maharashtra",
+	  		    inner: [{
+	  		        value: 15,
+	  		        label: "Pune"
+	  		    }, {
+	  		        value: 10,
+	  		        label: "Mumbai"
+	  		    }]
+	  		}, {
+	  		    value: 50,
+	  		    label: "Gujarat",
+	  		    inner: [{
+	  		        value: 20,
+	  		        label: "Surat"
+	  		    }, {
+	  		        value: 30,
+	  		        label: "Rajkot"
+	  		    }]
+	  		}],
+	  	};
+	  
+		// Draw chart
+		var samplePie = new psd3.Pie(config);
+	</script>
 
 </body>
 </html>
