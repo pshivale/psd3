@@ -83,7 +83,7 @@ psd3 should work with the latest [d3.js](http://d3js.org/) version 3.5.3 and lat
 	    pos: "top"
 	},
 	
-	// labels shown in the graph. Any function that returns a string. Data object is available as d.
+	// labels shown in the graph. Data object is available as d.
 	label: function(d) {
 	    return d.place + ":" + d.noOfColleges;
 	},
@@ -91,10 +91,10 @@ psd3 should work with the latest [d3.js](http://d3js.org/) version 3.5.3 and lat
 	// field to be used as value in graph
 	value: "noOfColleges",
 	
-	// filed to be used as nested data
+	// field to be used as nested data for multi-level pie chart
 	inner: "drilldown",
 	
-	// tooltip shown for the graph sections. Any function that returns a string. Data object is available as d.
+	// tooltip shown for the graph sections. Data object is available as d.
 	tooltip: function(d) {
 	    return "<p>There are " + d.noOfColleges + " medical colleges in " + d.place + ".</p>";
 	},
@@ -107,7 +107,7 @@ psd3 should work with the latest [d3.js](http://d3js.org/) version 3.5.3 and lat
 	// default is 1000
 	transitionDuration: 1500,
 	
-	// donutRadius for donut charts
+	// innerRadius for donut charts
 	// default is 0
 	donutRadius: 50
 }
