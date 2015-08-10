@@ -11,7 +11,8 @@ http://pshivale.github.io/psd3/index.html
 psd3 should work with the latest [d3.js](http://d3js.org/) version 3.5.3 and later.
 
 ## Usage
-Sample HTML.
+
+### Sample HTML.
 ```html
 <!doctype html>
 <html>
@@ -55,4 +56,59 @@ Sample HTML.
 
 </body>
 </html>
+```
+### Config Options
+```javascript
+{
+	// id of the container element in which graph will be placed
+    containerId: "chartContainer",
+    
+    // width of the container
+    // default is 400
+	width: 500,
+	
+	// height of the container
+	// default is 400
+	height: 500,
+	
+	// data for plotting the graph
+	data: sampleData,
+	
+	// heading of the graph
+	heading: {
+		// text of the heading
+	    text: "Medical Colleges in India",
+	    // position of the heading
+	    // default is top
+	    pos: "top"
+	},
+	
+	// labels shown in the graph. Any function that returns a string. Data object is available as d.
+	label: function(d) {
+	    return d.place + ":" + d.noOfColleges;
+	},
+	
+	// field to be used as value in graph
+	value: "noOfColleges",
+	
+	// filed to be used as nested data
+	inner: "drilldown",
+	
+	// tooltip shown for the graph sections. Any function that returns a string. Data object is available as d.
+	tooltip: function(d) {
+	    return "<p>There are " + d.noOfColleges + " medical colleges in " + d.place + ".</p>";
+	},
+	
+	// transition effect. Any d3 ease transition is accepted.
+	// default is linear
+	transition: "bounce",
+	
+	// transitionDuration
+	// default is 1000
+	transitionDuration: 1500,
+	
+	// donutRadius for donut charts
+	// default is 0
+	donutRadius: 50
+}
 ```
