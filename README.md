@@ -1,4 +1,4 @@
-## psd3 - Charts based on d3.js
+## psd3 - Javascript chart library based on d3.js
 
 Javascript pie chart library based on d3.js that supports multi-level pie and donut charts.
 
