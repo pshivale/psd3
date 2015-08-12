@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>psd3 - Complex Multi-level Donut Chart</title>
+<script type="text/javascript" src="../vendor/js/d3.js"></script>
+<script type="text/javascript" src="../psd3.js"></script>
+
+<link rel="stylesheet" type="text/css" href="../psd3.css"/>
+
+</head>
+<body>
+
+<div>
+	<ul>
+		<li>Double click a section to drill down!</li>
+	  	<li>Double click center section to drill back up!</li>
+	</ul>
+</div>
+
+<div id="chartContainer"></div>
+
+<script type="text/javascript">
+	var sampleData = [{
+	    noOfColleges: 25,
+	    place: "Maharashtra",
+	    drilldown: [{
+	        noOfColleges: 15,
+	        place: "Pune",
+	        drilldown: [{
+	            noOfColleges: 10,
+	            place: "Yerawada",
+	            drilldown: []
+	        }, {
+	            noOfColleges: 5,
+	            place: "Kothrud",
+	            drilldown: []
+	        }]
+	    }, {
+	        noOfColleges: 10,
+	        place: "Mumbai",
+	        drilldown: [{
+	            noOfColleges: 8,
+	            place: "Bandra",
+	            drilldown: []
+	        }, {
+	            noOfColleges: 2,
+	            place: "Varali",
+	            drilldown: []
+	        }]
+	    }]
+	}, {
+	    noOfColleges: 50,
+	    place: "Gujarat",
+	    drilldown: [{
+	        noOfColleges: 20,
+	        place: "Surat",
+	        drilldown: [{
+	            noOfColleges: 15,
+	            place: "Danti",
+	            drilldown: []
+	        }, {
+	            noOfColleges: 5,
+	            place: "Hajira",
+	            drilldown: []
+	        }]
+	    }, {
+	        noOfColleges: 30,
+	        place: "Rajkot",
+	        drilldown: [{
+	            noOfColleges: 12,
+	            place: "Patan",
+	            drilldown: []
+	        }, {
+	            noOfColleges: 18,
+	            place: "Modhera",
+	            drilldown: []
+	        }]
+	    }, {
+	        noOfColleges: 4,
+	        place: "Godhra",
+	        drilldown: [{
+	            place: "Barda",
+	            noOfColleges: 2,
+	            drilldown: []
+	        }, {
+	            place: "Porbandar",
+	            noOfColleges: 2,
+	            drilldown: []
+	        }]
+	    }]
+	}, {
+	    noOfColleges: 20,
+	    place: "MP",
+	    drilldown: [{
+	        noOfColleges: 4,
+	        place: "Indore",
+	        drilldown: [{
+	            place: "Devas",
+	            noOfColleges: 2,
+	            drilldown: []
+	        }, {
+	            place: "Dhar",
+	            noOfColleges: 2,
+	            drilldown: []
+	        }]
+	    }, {
+	        noOfColleges: 5,
+	        place: "Bhopal",
+	        drilldown: [{
+	            place: "Vidish",
+	            noOfColleges: 3,
+	            drilldown: []
+	        }, {
+	            place: "Raisen",
+	            noOfColleges: 2,
+	            drilldown: []
+	        }]
+	    }, {
+	        noOfColleges: 8,
+	        place: "Ujjain",
+	        drilldown: [{
+	            place: "Shajapur",
+	            noOfColleges: 2,
+	            drilldown: []
+	        }, {
+	            place: "Ratlam",
+	            noOfColleges: 6,
+	            drilldown: []
+	        }]
+	    }, {
+	        noOfColleges: 3,
+	        place: "Sachi",
+	        drilldown: [{
+	            place: "Sagar",
+	            noOfColleges: 1,
+	            drilldown: []
+	        }, {
+	            place: "Ashoknagar",
+	            noOfColleges: 2,
+	            drilldown: []
+	        }]
+	    }]
+	}];
+
+	var config = {
+	    containerId: "chartContainer",
+	    width: 500,
+	    height: 500,
+	    data: sampleData,
+	    heading: {
+	    	text: "Medical Colleges in India",
+	    	pos: "top"
+	    },
+	    label: function(d) {
+	        return d.place + ":" + d.noOfColleges;
+	    },
+	    value: "noOfColleges",
+	    inner: "drilldown",
+	    tooltip: function(d) {
+	        return "<p>There are " + d.noOfColleges + " medical colleges in " + d.place + ".</p>";
+	    },
+	    transition: "bounce",
+	    transitionDuration: 1500,
+	    donutRadius: 50
+	};
+
+	var samplePie = new psd3.Pie(config);
+</script>
+
+</body>
+</html>
