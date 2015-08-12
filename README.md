@@ -4,7 +4,7 @@ Javascript pie chart library based on d3.js that supports multi-level pie and do
 
 ### Demos
 
-http://pshivale.github.io/psd3/index.html
+http://pshivale.github.io/psd3/
 
 ### Dependencies
 
