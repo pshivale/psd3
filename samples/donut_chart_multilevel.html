@@ -3,20 +3,27 @@
 <head>
 	<meta charset="UTF-8">
 	<title>psd3 - Complex Multi-level Donut Chart</title>
+	<link rel="stylesheet" type="text/css" href="../../css/bootstrap.min.css">
+	<script type="text/javascript" src="../../js/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="../../js/bootstrap.min.js"></script>
+
 	<script type="text/javascript" src="../js/d3.js"></script>
 	<script type="text/javascript" src="../js/psd3.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="../css/psd3.min.css"/>
 </head>
-<body>
+<body style="margin: 15px;">
 
-<div>
-	<ul>
-		<li>Double click a section to drill down!</li>
-	  	<li>Double click center section to drill back up!</li>
-	</ul>
+<div class="container">
+	<div class="well">
+		<ul>
+		<li><a href="https://github.com/pshivale/psd3/blob/gh-pages/samples/donut_chart_multilevel.html">View source on github</a></li>
+			<li>Double click a section to drill down!</li>
+		  	<li>Double click center section to drill back up!</li>
+		</ul>
+	</div>
+
+	<div id="chartContainer" class="well"></div>	
 </div>
-
-<div id="chartContainer"></div>
 
 <script type="text/javascript">
 	var sampleData = [{
