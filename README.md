@@ -121,3 +121,11 @@ psd3 should work with the latest [d3.js](http://d3js.org/) version 3.5.3 and lat
 	donutRadius: 50
 }
 ```
+### Style
+
+You can change the style of some of the elements of the chart in psd3.css
+
+* Highlight color of the pie slice
+* Arc stroke color
+* Arc stroke width
+* Tooltip
