@@ -54,6 +54,17 @@ drawPie = function(){
 }
 
 
+var customArcTween = function(d) {
+        var start = {
+            startAngle: d.startAngle,
+            endAngle: d.startAngle
+        };
+        var interpolate = d3.interpolate(start, d);
+        return function(t) {
+            return d.arc(interpolate(t));
+        };
+    };
+
 draw = function(svg, color, colorIndex, totalRadius, dataset, innerRadius, outerRadius, startAngle, endAngle) {
     console.log("**** draw ****");
     console.log("dataset = " + dataset);
@@ -65,6 +76,11 @@ draw = function(svg, color, colorIndex, totalRadius, dataset, innerRadius, outer
     console.log("colorIndex = " + colorIndex);
     // console.log("startAngle = " + startAngle);
     // console.log("endAngle = " + endAngle);
+
+var storeMetadataWithArc = function(d) {
+        d.arc = arc;
+    };
+
 
     var pie = d3.layout.pie();
     pie.value(function(d) {
@@ -98,8 +114,15 @@ draw = function(svg, color, colorIndex, totalRadius, dataset, innerRadius, outer
 
     //Draw arc paths
     var paths = arcs.append("path")
-                .attr("d", arc)
                 .attr("fill", color(arcIndex));
+
+    paths.each(storeMetadataWithArc);
+
+    paths.transition()
+        .duration(1000)
+        .delay(1000*arcIndex)
+        .ease("linear")
+        .attrTween("d", customArcTween);
 
     //paths.each(storeMetadataWithArc);
 
