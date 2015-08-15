@@ -1,3 +1,4 @@
+var arcIndex = 0;
 drawPie = function(){
     var dataset = [
                     {
@@ -33,10 +34,10 @@ drawPie = function(){
                                 inner:
                                 [
                                     {
-                                        value: 17
+                                        value: 5
                                     },
                                     {
-                                        value: 18
+                                        value: 30
                                     }
                                 ]
                             }
@@ -52,26 +53,22 @@ drawPie = function(){
     draw(svg, color, 0, 300, dataset, 0, 50, 0, 360*22/7/180);
 }
 
-var storeMetadataWithArc = function(d) {
-        d.arc = arc;
-        d.length = ds.length;
-        d.parentDs = ds;
-    };
 
 draw = function(svg, color, colorIndex, totalRadius, dataset, innerRadius, outerRadius, startAngle, endAngle) {
+    console.log("**** draw ****");
+    console.log("dataset = " + dataset);
     if(dataset === null || dataset ===undefined){
         return;
     }
-    console.log("dataset = " + dataset);
-    console.log("innerRadius = " + innerRadius);
-    console.log("outerRadius = " + outerRadius);
+    // console.log("innerRadius = " + innerRadius);
+    // console.log("outerRadius = " + outerRadius);
     console.log("colorIndex = " + colorIndex);
-    console.log("startAngle = " + startAngle);
-    console.log("endAngle = " + endAngle);
+    // console.log("startAngle = " + startAngle);
+    // console.log("endAngle = " + endAngle);
 
     var pie = d3.layout.pie();
     pie.value(function(d) {
-        console.log("d.value = " + d.value);
+        //console.log("d.value = " + d.value);
         return d.value;
     });
     pie.startAngle(startAngle)
@@ -80,14 +77,16 @@ draw = function(svg, color, colorIndex, totalRadius, dataset, innerRadius, outer
     var values = [];
     for(var i=0; i<dataset.length; i++){
         values.push(dataset[i].value);
+        if(dataset[i].value===35){
+            console.log("breakss now");
+        }
     }
     console.log(values);
 
     var arc = d3.svg.arc().innerRadius(innerRadius)
             .outerRadius(outerRadius);
     //Set up groups
-    var clazz = "arc" + colorIndex;
-    var result = [];
+    var clazz = "arc" + arcIndex++;
 
     var arcs = svg.selectAll("g." + clazz)
         .data(pie(dataset))
@@ -98,16 +97,17 @@ draw = function(svg, color, colorIndex, totalRadius, dataset, innerRadius, outer
                 "translate(" + (totalRadius) + "," + (totalRadius) + ")");
 
     //Draw arc paths
-    paths = arcs.append("path")
+    var paths = arcs.append("path")
                 .attr("d", arc)
-                .attr("fill", color(colorIndex));
+                .attr("fill", color(arcIndex));
 
     //paths.each(storeMetadataWithArc);
 
-
+    console.log("paths.data() = " + paths.data());
     for(var j=0; j< dataset.length; j++){
-        console.log("paths.data()[j] = " + paths.data()[j]);
-        if(paths.data()[j] !== undefined){
+        console.log("dataset[j] = " + dataset[j]);
+        //console.log("paths.data()[j] = " + paths.data()[j]);
+        if(dataset[j].inner !== undefined){
             draw(svg, color, ++colorIndex, totalRadius, dataset[j].inner, innerRadius+50, outerRadius+50, paths.data()[j].startAngle, paths.data()[j].endAngle);    
         }
 
