@@ -59,7 +59,7 @@ drawPie = function(){
         .attr("width", 600)
         .attr("height", 600);
     var color = d3.scale.category20();
-    draw(svg, color, 0, 300, dataset, 0, 50, 0, 360*22/7/180);
+    draw(svg, color, 0, 300, dataset, 0, 50, 0, 360*22/7/180,[0,0]);
 }
 
 
@@ -84,12 +84,13 @@ var customArcTween = function(d) {
         return d.value;
     };
 
-draw = function(svg, color, colorIndex, totalRadius, dataset, innerRadius, outerRadius, startAngle, endAngle) {
+draw = function(svg, color, colorIndex, totalRadius, dataset, innerRadius, outerRadius, startAngle, endAngle, parentCentroid) {
     console.log("**** draw ****");
     console.log("dataset = " + dataset);
     if(dataset === null || dataset ===undefined){
         return;
     }
+    console.log("parentCentroid = " + parentCentroid);
     // console.log("innerRadius = " + innerRadius);
     // console.log("outerRadius = " + outerRadius);
     console.log("colorIndex = " + colorIndex);
@@ -146,24 +147,36 @@ var storeMetadataWithArc = function(d) {
     //paths.each(storeMetadataWithArc);
 
         //Labels
-    arcs.append("text")
+    var texts = arcs.append("text")
+        .attr("x", function(){
+            return parentCentroid[0];
+        })
+        .attr("y", function(){
+            return parentCentroid[1];
+        })
         .transition()
-        .ease("bounce")
+        .ease("linear")
         .duration(1000)
         .delay(1000*(arcIndex-1))
-        .attr("transform", textTransform)
+        .attr("transform", function(d){
+            var a = [];
+            a[0] = arc.centroid(d)[0] - parentCentroid[0];
+            a[1] = arc.centroid(d)[1] - parentCentroid[1];
+            return "translate(" + a + ")";
+        })
         .attr("text-anchor", "middle")
         .text(textText)
         .attr("title", textTitle);
-
+        
+    
+        
     console.log("paths.data() = " + paths.data());
     for(var j=0; j< dataset.length; j++){
         console.log("dataset[j] = " + dataset[j]);
         //console.log("paths.data()[j] = " + paths.data()[j]);
         if(dataset[j].inner !== undefined){
-            draw(svg, color, ++colorIndex, totalRadius, dataset[j].inner, innerRadius+50, outerRadius+50, paths.data()[j].startAngle, paths.data()[j].endAngle);    
+            draw(svg, color, ++colorIndex, totalRadius, dataset[j].inner, innerRadius+50, outerRadius+50, paths.data()[j].startAngle, paths.data()[j].endAngle, arc.centroid(paths.data()[j]));
         }
-
     }
 
 
