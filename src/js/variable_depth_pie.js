@@ -37,7 +37,16 @@ drawPie = function(){
                                         value: 5
                                     },
                                     {
-                                        value: 30
+                                        value: 30,
+                                        inner:
+                                        [
+                                            {
+                                                value:10
+                                            },
+                                            {
+                                                value: 20
+                                            }
+                                        ]
                                     }
                                 ]
                             }
@@ -63,6 +72,16 @@ var customArcTween = function(d) {
         return function(t) {
             return d.arc(interpolate(t));
         };
+    };
+
+    var textTransform = function(d) {
+        return "translate(" + d.arc.centroid(d) + ")";
+    };
+    var textText = function(d) {
+        return d.value;
+    };
+    var textTitle = function(d) {
+        return d.value;
     };
 
 draw = function(svg, color, colorIndex, totalRadius, dataset, innerRadius, outerRadius, startAngle, endAngle) {
@@ -125,6 +144,17 @@ var storeMetadataWithArc = function(d) {
         .attrTween("d", customArcTween);
 
     //paths.each(storeMetadataWithArc);
+
+        //Labels
+    arcs.append("text")
+        .transition()
+        .ease("bounce")
+        .duration(1000)
+        .delay(1000*(arcIndex-1))
+        .attr("transform", textTransform)
+        .attr("text-anchor", "middle")
+        .text(textText)
+        .attr("title", textTitle);
 
     console.log("paths.data() = " + paths.data());
     for(var j=0; j< dataset.length; j++){
