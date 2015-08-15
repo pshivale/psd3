@@ -1,5 +1,6 @@
 var arcIndex = 0;
-drawPie = function(){
+
+var pie = function(){
     var dataset = [
                     {
                         value: 25,
@@ -53,38 +54,42 @@ drawPie = function(){
                         ]
                     }
                 ];
+    drawPie(dataset);
+}
+var drawPie = function(dataset){
+    arcIndex = 0;
     var svg = d3.select("#"+"chartContainer")
         .append("svg")
         .attr("id", "chartContainer"+"_svg")
         .attr("width", 600)
         .attr("height", 600);
     var color = d3.scale.category20();
-    draw(svg, color, 0, 300, dataset, 0, 50, 0, 360*22/7/180,[0,0]);
+    draw(svg, color, 0, 300, dataset, dataset, dataset.length, 0, 50, 0, 360*22/7/180,[0,0]);
 }
 
 
 var customArcTween = function(d) {
-        var start = {
-            startAngle: d.startAngle,
-            endAngle: d.startAngle
-        };
-        var interpolate = d3.interpolate(start, d);
-        return function(t) {
-            return d.arc(interpolate(t));
-        };
+    var start = {
+        startAngle: d.startAngle,
+        endAngle: d.startAngle
     };
+    var interpolate = d3.interpolate(start, d);
+    return function(t) {
+        return d.arc(interpolate(t));
+    };
+};
 
-    var textTransform = function(d) {
-        return "translate(" + d.arc.centroid(d) + ")";
-    };
-    var textText = function(d) {
-        return d.value;
-    };
-    var textTitle = function(d) {
-        return d.value;
-    };
+var textTransform = function(d) {
+    return "translate(" + d.arc.centroid(d) + ")";
+};
+var textText = function(d) {
+    return d.value;
+};
+var textTitle = function(d) {
+    return d.value;
+};
 
-draw = function(svg, color, colorIndex, totalRadius, dataset, innerRadius, outerRadius, startAngle, endAngle, parentCentroid) {
+var draw = function(svg, color, colorIndex, totalRadius, dataset, originalDataset, originalDatasetLength, innerRadius, outerRadius, startAngle, endAngle, parentCentroid) {
     console.log("**** draw ****");
     console.log("dataset = " + dataset);
     if(dataset === null || dataset ===undefined){
@@ -96,11 +101,6 @@ draw = function(svg, color, colorIndex, totalRadius, dataset, innerRadius, outer
     console.log("colorIndex = " + colorIndex);
     // console.log("startAngle = " + startAngle);
     // console.log("endAngle = " + endAngle);
-
-var storeMetadataWithArc = function(d) {
-        d.arc = arc;
-    };
-
 
     var pie = d3.layout.pie();
     pie.value(function(d) {
@@ -119,10 +119,19 @@ var storeMetadataWithArc = function(d) {
     }
     console.log(values);
 
+    var dblclick = function(d) {
+        reDrawPie(d, originalDataset);
+    };
+
     var arc = d3.svg.arc().innerRadius(innerRadius)
             .outerRadius(outerRadius);
     //Set up groups
     var clazz = "arc" + arcIndex++;
+
+    var storeMetadataWithArc = function(d) {
+        d.arc = arc;
+        d.length = dataset.length;
+    };
 
     var arcs = svg.selectAll("g." + clazz)
         .data(pie(dataset))
@@ -130,7 +139,8 @@ var storeMetadataWithArc = function(d) {
         .append("g")
         .attr("class", "arc " + clazz)
         .attr("transform",
-                "translate(" + (totalRadius) + "," + (totalRadius) + ")");
+                "translate(" + (totalRadius) + "," + (totalRadius) + ")")
+        .on("dblclick", dblclick);
 
     //Draw arc paths
     var paths = arcs.append("path")
@@ -175,9 +185,24 @@ var storeMetadataWithArc = function(d) {
         console.log("dataset[j] = " + dataset[j]);
         //console.log("paths.data()[j] = " + paths.data()[j]);
         if(dataset[j].inner !== undefined){
-            draw(svg, color, ++colorIndex, totalRadius, dataset[j].inner, innerRadius+50, outerRadius+50, paths.data()[j].startAngle, paths.data()[j].endAngle, arc.centroid(paths.data()[j]));
+            draw(svg, color, ++colorIndex, totalRadius, dataset[j].inner, originalDataset, originalDatasetLength, innerRadius+50, outerRadius+50, paths.data()[j].startAngle, paths.data()[j].endAngle, arc.centroid(paths.data()[j]));
         }
     }
 
 
+};
+
+var zoomStack = [];
+
+var reDrawPie = function(d, ds) {
+    var tmp = [];
+    d3.select("#"+"chartContainer"+"_svg").remove();
+    //d3.select("#"+this.config.containerId+"_tooltip").remove();
+    if (d.length == 1) {
+        tmp = zoomStack.pop();
+    } else {
+        tmp.push(d.data);
+        zoomStack.push(ds);
+    }
+    drawPie(tmp);
 };
