@@ -120,7 +120,7 @@ var storeMetadataWithArc = function(d) {
 
     paths.transition()
         .duration(1000)
-        .delay(1000*arcIndex)
+        .delay(1000*(arcIndex-1))
         .ease("linear")
         .attrTween("d", customArcTween);
 
