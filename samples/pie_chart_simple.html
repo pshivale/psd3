@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>psd3 - Simple Multi-level Pie Chart</title>
 <script type="text/javascript" src="../vendor/js/d3.js"></script>
-<script type="text/javascript" src="../psd3.js"></script>
+<script type="text/javascript" src="../src/js/variable_depth_pie.js"></script>
 
 <link rel="stylesheet" type="text/css" href="../psd3.css"/>
 
@@ -35,18 +35,12 @@
 		    }]
 		}, {
 		    value: 50,
-		    label: "Gujarat",
-		    inner: [{
-		        value: 20,
-		        label: "Surat"
-		    }, {
-		        value: 30,
-		        label: "Rajkot"
-		    }]
+		    label: "Gujarat"
 		}],
 	};
 
-	var samplePie = new psd3.Pie(config);
+	drawPie();
+	//var samplePie = new psd3.Pie(config);
 </script>
 
 </body>
