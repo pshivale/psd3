@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <title>psd3 - Complex Multi-level Donut Chart</title>
 <script type="text/javascript" src="../vendor/js/d3.js"></script>
-<script type="text/javascript" src="../psd3.js"></script>
+<script type="text/javascript" src="../src/js/graph.js"></script>
+<script type="text/javascript" src="../src/js/variable_depth_pie.js"></script>
 
 <link rel="stylesheet" type="text/css" href="../psd3.css"/>
 
@@ -153,7 +154,7 @@
 	    	pos: "top"
 	    },
 	    label: function(d) {
-	        return d.place + ":" + d.noOfColleges;
+	        return d.data.place + ":" + d.data.noOfColleges;
 	    },
 	    value: "noOfColleges",
 	    inner: "drilldown",
@@ -162,7 +163,7 @@
 	    },
 	    transition: "bounce",
 	    transitionDuration: 1500,
-	    donutRadius: 50
+	    donutRadius: 20
 	};
 
 	var samplePie = new psd3.Pie(config);

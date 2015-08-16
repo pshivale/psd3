@@ -14,13 +14,13 @@ psd3.Pie.prototype = Object.create(psd3.Graph.prototype);
 psd3.Pie.prototype.constructor = psd3.Pie;
 
 psd3.Pie.prototype.findMaxDepth = function(dataset){
-    if(dataset === null || dataset === undefined){
+    if(dataset === null || dataset === undefined || dataset.length < 1){
         return 0;
     }
     var currentLevel;
     var maxOfInner=0;
     for(var i=0;i<dataset.length;i++){
-        var maxInnerLevel = this.findMaxDepth(dataset[i].inner);
+        var maxInnerLevel = this.findMaxDepth(dataset[i][this.config.inner]);
         if(maxOfInner<maxInnerLevel){
             maxOfInner = maxInnerLevel;
         }
@@ -44,13 +44,11 @@ psd3.Pie.prototype.mouseout = function() {
 psd3.Pie.prototype.drawPie = function(dataset){
     _this = this;
     arcIndex = 0;
-    var width = 400;
-    var height = 400;
     var svg = d3.select("#"+_this.config.containerId)
         .append("svg")
         .attr("id", _this.config.containerId+"_svg")
-        .attr("width", width)
-        .attr("height", height)
+        .attr("width", _this.config.width)
+        .attr("height", _this.config.height)
         .style("background-color", "#eee");
     _this.tooltipId = _this.config.containerId+"_tooltip";
     var tooltipDiv = d3.select("#"+_this.config.containerId).append("div")
@@ -62,14 +60,15 @@ psd3.Pie.prototype.drawPie = function(dataset){
         .text("100%");
     // to contain pie cirlce
     var radius;
-    if(width>height){
-        radius = width/2;
+    if(_this.config.width>_this.config.height){
+        radius = _this.config.width/2;
     }else{
-        radius = height/2;
+        radius = _this.config.height/2;
     }
-    var innerRadius = 50;
-    var depth = _this.findMaxDepth(dataset);
-    var outerRadius = innerRadius + (radius-innerRadius)/depth;
+    var innerRadius = _this.config.donutRadius;
+    var maxDepth = _this.findMaxDepth(dataset);
+    console.log("maxDepth = " + maxDepth)
+    var outerRadius = innerRadius + (radius-innerRadius)/maxDepth;
     var color = d3.scale.category20();
     var originalOuterRadius = outerRadius;
     var radiusDelta = outerRadius - innerRadius;
@@ -93,7 +92,7 @@ psd3.Pie.prototype.textTransform = function(d) {
 };
 
 psd3.Pie.prototype.textTitle = function(d) {
-    return d.value;
+    return d.data[_this.config.value];
 };
 
 psd3.Pie.prototype.draw = function(svg, color, colorIndex, totalRadius, dataset, originalDataset, originalDatasetLength, innerRadius, outerRadius, radiusDelta, startAngle, endAngle, parentCentroid) {
@@ -115,17 +114,18 @@ psd3.Pie.prototype.draw = function(svg, color, colorIndex, totalRadius, dataset,
     };
 
     var pie = d3.layout.pie();
+    pie.sort(null);
     pie.value(function(d) {
         //console.log("d.value = " + d.value);
-        return d.value;
+        return d[_this.config.value];
     });
     pie.startAngle(startAngle)
         .endAngle(endAngle);
     
     var values = [];
     for(var i=0; i<dataset.length; i++){
-        values.push(dataset[i].value);
-        if(dataset[i].value===35){
+        values.push(dataset[i][_this.config.value]);
+        if(dataset[i][_this.config.value]===35){
             console.log("breakss now");
         }
     }
@@ -200,8 +200,8 @@ psd3.Pie.prototype.draw = function(svg, color, colorIndex, totalRadius, dataset,
     for(var j=0; j< dataset.length; j++){
         console.log("dataset[j] = " + dataset[j]);
         //console.log("paths.data()[j] = " + paths.data()[j]);
-        if(dataset[j].inner !== undefined){
-            _this.draw(svg, color, ++colorIndex, totalRadius, dataset[j].inner, originalDataset, originalDatasetLength, innerRadius+radiusDelta, outerRadius+radiusDelta, radiusDelta, paths.data()[j].startAngle, paths.data()[j].endAngle, arc.centroid(paths.data()[j]));
+        if(dataset[j][_this.config.inner] !== undefined){
+            _this.draw(svg, color, ++colorIndex, totalRadius, dataset[j][_this.config.inner], originalDataset, originalDatasetLength, innerRadius+radiusDelta, outerRadius+radiusDelta, radiusDelta, paths.data()[j].startAngle, paths.data()[j].endAngle, arc.centroid(paths.data()[j]));
         }
     }
 
