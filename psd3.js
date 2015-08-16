@@ -25,8 +25,8 @@ psd3.Graph = function(config) {
         transitionDuration: 1000,
         donutRadius: 0,
         gradient: false,
-        gradientDelta: 1,
-        colors: d3.scale.category20()
+        colors: d3.scale.category20(),
+        labelColor: "black"
     };
     /*console.log("before defaults");
     for(var property in config){
@@ -233,15 +233,15 @@ psd3.Pie.prototype.draw = function(svg, totalRadius, dataset, originalDataset, o
     var startColor, endColor;
     if (_this.config.gradient) {
         // always make index even. d3 color20 radiant look better that way
-        var index = Math.abs((_this.arcIndex % (20 / _this.config.gradientDelta) - 1) * _this.config.gradientDelta);
-        var endIndex = Math.abs(index + _this.config.gradientDelta - 1);
-        console.log("arcindex = " + _this.arcIndex + "(" + index + ", " + endIndex);
+        var index = 2 * _this.arcIndex;
+        var endIndex = index + 1;
+        //console.log("arcindex = " + _this.arcIndex + "(" + index + ", " + endIndex);
         startColor = _this.config.colors(index);
         endColor = _this.config.colors(endIndex);
     } else {
         startColor = endColor = _this.config.colors(this.arcIndex);
     }
-    console.log("color = " + startColor + ", " + endColor);
+    //console.log("color = " + startColor + ", " + endColor);
     gradient.append("svg:stop")
         .attr("offset", "0%")
         .attr("stop-color", startColor)
@@ -291,6 +291,7 @@ psd3.Pie.prototype.draw = function(svg, totalRadius, dataset, originalDataset, o
         })
         .attr("text-anchor", "middle")
         .text(_this.textText)
+        .style("fill", _this.config.labelColor)
         .attr("title", _this.textTitle);
 
 

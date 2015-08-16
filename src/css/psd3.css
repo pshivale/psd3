@@ -2,7 +2,6 @@ text {
     font-family: sans-serif;
     font-size: 12px;
     pointer-events: none;
-    fill: black;
 }
 
 .axis path,

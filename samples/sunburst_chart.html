@@ -3,19 +3,27 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>psd3 - Complex Multi-level Donut Chart</title>
+    <title>psd3 - Sunburst Chart</title>
     <script type="text/javascript" src="../vendor/js/d3.js"></script>
     <script type="text/javascript" src="../psd3.js"></script>
     <link rel="stylesheet" type="text/css" href="../psd3.css" /> </head>
+</head>
 
-<body>
-    <div>
-        <ul>
-            <li>Double click a section to drill down!</li>
-            <li>Double click center section to drill back up!</li>
-        </ul>
+<body style="margin: 15px;">
+
+    <div class="container">
+        <div class="well">
+            <h2><a href="../index.html">psd3</a> - Sunburst Chart</h2>
+            <ul>
+                <li><a href="https://github.com/pshivale/psd3/blob/gh-pages/samples/sunburst_chart.html">View source on github</a></li>
+                <li>Double click a section to drill down!</li>
+                <li>Double click center section to drill back up!</li>
+            </ul>
+        </div>
+
+        <div id="chartContainer" class="well"></div>
     </div>
-    <div id="chartContainer"></div>
+
     <script type="text/javascript">
         var sampleData = [{
             noOfColleges: 25,
@@ -25,12 +33,10 @@
                 place: "Pune",
                 drilldown: [{
                     noOfColleges: 10,
-                    place: "Yerawada",
-                    drilldown: []
+                    place: "Yerawada"
                 }, {
                     noOfColleges: 5,
-                    place: "Kothrud",
-                    drilldown: []
+                    place: "Kothrud"
                 }]
             }, {
                 noOfColleges: 10,
@@ -38,11 +44,16 @@
                 drilldown: [{
                     noOfColleges: 8,
                     place: "Bandra",
-                    drilldown: []
+                    drilldown: [{
+                        noOfColleges: 3,
+                        place: "Turner Road"
+                    }, {
+                        noOfColleges: 5,
+                        place: "Perry Road"
+                    }]
                 }, {
                     noOfColleges: 2,
-                    place: "Varali",
-                    drilldown: []
+                    place: "Varali"
                 }]
             }]
         }, {
@@ -50,40 +61,22 @@
             place: "Gujarat",
             drilldown: [{
                 noOfColleges: 20,
-                place: "Surat",
-                drilldown: [{
-                    noOfColleges: 15,
-                    place: "Danti",
-                    drilldown: []
-                }, {
-                    noOfColleges: 5,
-                    place: "Hajira",
-                    drilldown: []
-                }]
+                place: "Surat"
             }, {
                 noOfColleges: 30,
                 place: "Rajkot",
                 drilldown: [{
                     noOfColleges: 12,
                     place: "Patan",
-                    drilldown: []
+
                 }, {
                     noOfColleges: 18,
                     place: "Modhera",
-                    drilldown: []
+
                 }]
             }, {
                 noOfColleges: 4,
-                place: "Godhra",
-                drilldown: [{
-                    place: "Barda",
-                    noOfColleges: 2,
-                    drilldown: []
-                }, {
-                    place: "Porbandar",
-                    noOfColleges: 2,
-                    drilldown: []
-                }]
+                place: "Godhra"
             }]
         }, {
             noOfColleges: 20,
@@ -94,48 +87,30 @@
                 drilldown: [{
                     place: "Devas",
                     noOfColleges: 2,
-                    drilldown: []
+
                 }, {
                     place: "Dhar",
                     noOfColleges: 2,
-                    drilldown: []
+
                 }]
             }, {
                 noOfColleges: 5,
-                place: "Bhopal",
-                drilldown: [{
-                    place: "Vidish",
-                    noOfColleges: 3,
-                    drilldown: []
-                }, {
-                    place: "Raisen",
-                    noOfColleges: 2,
-                    drilldown: []
-                }]
+                place: "Bhopal"
             }, {
                 noOfColleges: 8,
                 place: "Ujjain",
                 drilldown: [{
                     place: "Shajapur",
                     noOfColleges: 2,
-                    drilldown: []
+
                 }, {
                     place: "Ratlam",
                     noOfColleges: 6,
-                    drilldown: []
+
                 }]
             }, {
                 noOfColleges: 3,
-                place: "Sachi",
-                drilldown: [{
-                    place: "Sagar",
-                    noOfColleges: 1,
-                    drilldown: []
-                }, {
-                    place: "Ashoknagar",
-                    noOfColleges: 2,
-                    drilldown: []
-                }]
+                place: "Sachi"
             }]
         }];
         var config = {
@@ -155,15 +130,13 @@
             tooltip: function(d) {
                 return "<p>There are " + d.noOfColleges + " medical colleges in " + d.place + ".</p>";
             },
-            transition: "linear",
+            transition: "bounce",
             transitionDuration: 1000,
-            donutRadius: 20,
-            gradient: true,
-            colors: d3.scale.category20(),
-            labelColor: "white"
+            donutRadius: 50
         };
         var samplePie = new psd3.Pie(config);
     </script>
+
 </body>
 
 </html>
