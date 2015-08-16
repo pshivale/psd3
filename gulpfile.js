@@ -4,8 +4,9 @@ var cssmin = require('gulp-cssmin');
 var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
 var concat = require('gulp-concat');
+var prettify = require('gulp-jsbeautifier');
 
-gulp.task('default', ['lint','maxCss','maxJs','minCss','minJs']);
+gulp.task('default', ['lint','maxCss','maxJs','minCss','minJs', 'format-js','prettify-html','prettify-css']);
 
 gulp.task('lint', function() {
   return gulp.src('src/js/*.js')
@@ -47,4 +48,22 @@ gulp.task('copyDemos', function() {
   gulp.src('samples/**/*', {base:"."})
     .pipe(gulp.dest('../pshivale.github.io/psd3/'));
 
+});
+
+gulp.task('format-js', function() {
+  gulp.src('src/**/*.js')
+    .pipe(prettify({indentSize: 4, mode: 'VERIFY_AND_WRITE'}))
+    .pipe(gulp.dest('src'))
+});
+
+gulp.task('prettify-html', function() {
+  gulp.src('samples/**/*.html')
+    .pipe(prettify({indentSize: 4}))
+    .pipe(gulp.dest('samples'))
+});
+
+gulp.task('prettify-css', function() {
+  gulp.src('src/**/*.css')
+    .pipe(prettify({indentSize: 4}))
+    .pipe(gulp.dest('src'))
 });

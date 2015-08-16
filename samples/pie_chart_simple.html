@@ -1,52 +1,43 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="UTF-8">
-<title>psd3 - Simple Multi-level Pie Chart</title>
-<script type="text/javascript" src="../vendor/js/d3.js"></script>
-<script type="text/javascript" src="../psd3.js"></script>
+    <meta charset="UTF-8">
+    <title>psd3 - Simple Multi-level Pie Chart</title>
+    <script type="text/javascript" src="../vendor/js/d3.js"></script>
+    <script type="text/javascript" src="../psd3.js"></script>
+    <link rel="stylesheet" type="text/css" href="../psd3.css" /> </head>
 
-<link rel="stylesheet" type="text/css" href="../psd3.css"/>
-
-</head>
 <body>
-
-<div>
-	<ul>
-		<li>Double click a section to drill down!</li>
-	  	<li>Double click center section to drill back up!</li>
-	</ul>
-</div>
-
-<div id="chartContainer"></div>
-
-<script type="text/javascript">
-	var config = {
-		containerId: "chartContainer",
-		data: [{
-		    value: 25,
-		    inner: [{
-		        value: 15,
-		        inner: 
-		        [
-		        	{
-		        		value: 5
-		        	},
-		        	{
-		        		value: 10
-		        	}
-		        ]
-		    }, {
-		        value: 10
-		    }]
-		}, {
-		    value: 50
-		}],
-	};
-
-	//pie();
-	var samplePie = new psd3.Pie(config);
-</script>
-
+    <div>
+        <ul>
+            <li>Double click a section to drill down!</li>
+            <li>Double click center section to drill back up!</li>
+        </ul>
+    </div>
+    <div id="chartContainer"></div>
+    <script type="text/javascript">
+        var config = {
+            containerId: "chartContainer",
+            data: [{
+                value: 25,
+                inner: [{
+                    value: 15,
+                    inner: [{
+                        value: 5
+                    }, {
+                        value: 10
+                    }]
+                }, {
+                    value: 10
+                }]
+            }, {
+                value: 50
+            }],
+        };
+        //pie();
+        var samplePie = new psd3.Pie(config);
+    </script>
 </body>
+
 </html>

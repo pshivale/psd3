@@ -1,7 +1,7 @@
 /**
  * 
  */
- var psd3 = psd3 || {};
+var psd3 = psd3 || {};
 psd3.Graph = function(config) {
     var _this = this;
     this.config = config;
@@ -29,9 +29,9 @@ psd3.Graph = function(config) {
     for(var property in config){
         console.log(property);
     }*/
-    for(var property in this.defaults){
-        if(this.defaults.hasOwnProperty(property)){
-            if(!config.hasOwnProperty(property)){
+    for (var property in this.defaults) {
+        if (this.defaults.hasOwnProperty(property)) {
+            if (!config.hasOwnProperty(property)) {
                 config[property] = this.defaults[property];
             }
         }
