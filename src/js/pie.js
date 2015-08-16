@@ -15,7 +15,7 @@ psd3.Pie = function(config){
     if(pos=="bottom"){
         this.setHeading();    
     }
-}
+};
 
 psd3.Pie.prototype = Object.create(psd3.Graph.prototype);
 
@@ -35,7 +35,7 @@ psd3.Pie.prototype.findMaxDepth = function(dataset){
     }
     currentLevel = 1 + maxOfInner;
     return currentLevel;
-}
+};
 
 psd3.Pie.prototype.setHeading = function(){
     if(this.config.heading !== undefined){
@@ -90,13 +90,13 @@ psd3.Pie.prototype.drawPie = function(dataset){
     }
     var innerRadius = _this.config.donutRadius;
     var maxDepth = _this.findMaxDepth(dataset);
-    console.log("maxDepth = " + maxDepth)
+    console.log("maxDepth = " + maxDepth);
     var outerRadius = innerRadius + (radius-innerRadius)/maxDepth;
     var color = d3.scale.category20();
     var originalOuterRadius = outerRadius;
     var radiusDelta = outerRadius - innerRadius;
     _this.draw(svg, color, 0, radius, dataset, dataset, dataset.length, innerRadius, outerRadius, radiusDelta, 0, 360*22/7/180,[0,0]);
-}
+};
 
 
 psd3.Pie.prototype.customArcTween = function(d) {

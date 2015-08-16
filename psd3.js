@@ -11,7 +11,7 @@ psd3.Graph = function(config) {
         value: "value",
         inner: "inner",
         label: function(d) {
-            return d.label;
+            return d.data.value;
         },
         tooltip: function(d) {
             if (_this.config.value !== undefined) {
@@ -41,12 +41,10 @@ psd3.Graph = function(config) {
         console.log(property);
     }*/
 };
-/**
- * 
- */
+
 var psd3 = psd3 || {};
 
-psd3.Pie = function(config) {
+psd3.Pie = function(config){
     psd3.Graph.call(this, config);
     this.zoomStack = [];
     var pos = "top";
@@ -66,6 +64,22 @@ psd3.Pie.prototype = Object.create(psd3.Graph.prototype);
 
 psd3.Pie.prototype.constructor = psd3.Pie;
 
+psd3.Pie.prototype.findMaxDepth = function(dataset){
+    if(dataset === null || dataset === undefined || dataset.length < 1){
+        return 0;
+    }
+    var currentLevel;
+    var maxOfInner=0;
+    for(var i=0;i<dataset.length;i++){
+        var maxInnerLevel = this.findMaxDepth(dataset[i][this.config.inner]);
+        if(maxOfInner<maxInnerLevel){
+            maxOfInner = maxInnerLevel;
+        }
+    }
+    currentLevel = 1 + maxOfInner;
+    return currentLevel;
+};
+
 psd3.Pie.prototype.setHeading = function(){
     if(this.config.heading !== undefined){
         d3.select("#"+this.config.containerId)
@@ -79,176 +93,200 @@ psd3.Pie.prototype.setHeading = function(){
     }
 };
 
-psd3.Pie.prototype.getDepth = function(dset) {
-    //console.log("ds = " + ds);
-    var ds = dset[0];
-    var depth = 1;
-    while (ds !== null && ds !== undefined && ds[this.config.inner] !== undefined && ds[this.config.inner].length > 0) {
-        //console.log("ds[this.config.inner] = " + ds[this.config.inner]);
-        //console.log("depth = " + depth);
-        ds = ds[this.config.inner][0];
-        //console.log("ds = " + ds);
-        depth++;
-    }
-    //console.log("depth = " + depth);
-    return depth;
-};
+psd3.Pie.prototype.mouseover = function(d) {
+        d3.select("#"+_this.tooltipId)
+            .style("left", d3.event.clientX + "px")
+            .style("top", d3.event.clientY + "px")
+            .select("#value")
+            .html(_this.config.tooltip(d.data, _this.config.label));
+        d3.select("#" + _this.tooltipId).classed("psd3Hidden", false);
+    };
+psd3.Pie.prototype.mouseout = function() {
+        d3.select("#" + _this.tooltipId).classed("psd3Hidden", true);
+    };
 
-psd3.Pie.prototype.setDataSet = function(dset, depthneeded, currentDepth, ds) {
-    if (dset === null || dset === undefined) return ds;
-    if (depthneeded === currentDepth) {
-        for (var i = 0; i < dset.length; i++) {
-            //console.log("ds = " + ds);
-            ds.push(dset[i]);
-        }
-        return ds;
-    } else {
-        for (var j = 0; j < dset.length; j++) {
-            ds = this.setDataSet(dset[j][this.config.inner], depthneeded, currentDepth + 1, ds);
-        }
-        return ds;
+psd3.Pie.prototype.drawPie = function(dataset){
+    if(dataset === null || dataset === undefined || dataset.length < 1){
+        return;
     }
-};
-
-psd3.Pie.prototype.drawPie = function(dataset) {
-    var object = this;
-    var arcsArray = [];
-    //Easy colors accessible via a 10-step ordinal scale
-    var color = d3.scale.category20();
-    var tooltipId = object.config.containerId+"_tooltip";
-    //Create SVG element
-    var svg = d3.select("#"+object.config.containerId)
+    _this = this;
+    _this.arcIndex = 0;
+    var svg = d3.select("#"+_this.config.containerId)
         .append("svg")
-        .attr("id", object.config.containerId+"_svg")
-        .attr("width", object.config.width)
-        .attr("height", object.config.height);
-    var tooltipDiv = d3.select("#"+object.config.containerId).append("div")
-        .attr("id", tooltipId)
+        .attr("id", _this.config.containerId+"_svg")
+        .attr("width", _this.config.width)
+        .attr("height", _this.config.height);
+    _this.tooltipId = _this.config.containerId+"_tooltip";
+    var tooltipDiv = d3.select("#"+_this.config.containerId).append("div")
+        .attr("id", _this.tooltipId)
         .attr("class", "psd3Hidden psd3Tooltip");
     tooltipDiv.append("p")
         .append("span")
         .attr("id", "value")
         .text("100%");
+    // to contain pie cirlce
+    var radius;
+    if(_this.config.width>_this.config.height){
+        radius = _this.config.width/2;
+    }else{
+        radius = _this.config.height/2;
+    }
+    var innerRadius = _this.config.donutRadius;
+    var maxDepth = _this.findMaxDepth(dataset);
+    console.log("maxDepth = " + maxDepth);
+    var outerRadius = innerRadius + (radius-innerRadius)/maxDepth;
+    var color = d3.scale.category20();
+    var originalOuterRadius = outerRadius;
+    var radiusDelta = outerRadius - innerRadius;
+    _this.draw(svg, color, 0, radius, dataset, dataset, dataset.length, innerRadius, outerRadius, radiusDelta, 0, 360*22/7/180,[0,0]);
+};
+
+
+psd3.Pie.prototype.customArcTween = function(d) {
+    var start = {
+        startAngle: d.startAngle,
+        endAngle: d.startAngle
+    };
+    var interpolate = d3.interpolate(start, d);
+    return function(t) {
+        return d.arc(interpolate(t));
+    };
+};
+
+psd3.Pie.prototype.textTransform = function(d) {
+    return "translate(" + d.arc.centroid(d) + ")";
+};
+
+psd3.Pie.prototype.textTitle = function(d) {
+    return d.data[_this.config.value];
+};
+
+psd3.Pie.prototype.draw = function(svg, color, colorIndex, totalRadius, dataset, originalDataset, originalDatasetLength, innerRadius, outerRadius, radiusDelta, startAngle, endAngle, parentCentroid) {
+    _this = this;
+    console.log("**** draw ****");
+    console.log("dataset = " + dataset);
+    if(dataset === null || dataset === undefined || dataset.length < 1){
+        return;
+    }
+    console.log("parentCentroid = " + parentCentroid);
+    // console.log("innerRadius = " + innerRadius);
+    // console.log("outerRadius = " + outerRadius);
+    console.log("colorIndex = " + colorIndex);
+    // console.log("startAngle = " + startAngle);
+    // console.log("endAngle = " + endAngle);
+
+    psd3.Pie.prototype.textText = function(d) {
+        return _this.config.label(d);
+    };
 
     var pie = d3.layout.pie();
-    pie.value(function(d) {
-        return d[object.config.value];
-    });
     pie.sort(null);
+    pie.value(function(d) {
+        //console.log("d.value = " + d.value);
+        return d[_this.config.value];
+    });
+    pie.startAngle(startAngle)
+        .endAngle(endAngle);
+    
+    var values = [];
+    for(var i=0; i<dataset.length; i++){
+        values.push(dataset[i][_this.config.value]);
+        if(dataset[i][_this.config.value]===35){
+            console.log("breakss now");
+        }
+    }
+    console.log(values);
 
-    var outerRadius = object.config.width / 2;
-    var depth = this.getDepth(dataset);
-
-    var prevDsLength = 0;
     var dblclick = function(d) {
-        object.reDrawPie(d, ds);
+        _this.reDrawPie(d, originalDataset);
     };
-    var arcfill = function(d, i) {
-        return color(i + prevDsLength);
-    };
-    var mouseover = function(d) {
-        d3.select("#"+tooltipId)
-            .style("left", d3.event.clientX + "px")
-            .style("top", d3.event.clientY + "px")
-            .select("#value")
-            .html(object.config.tooltip(d.data, object.config.label));
-        d3.select("#" + tooltipId).classed("psd3Hidden", false);
-    };
-    var mouseout = function() {
-        d3.select("#" + tooltipId).classed("psd3Hidden", true);
-    };
+
+    var arc = d3.svg.arc().innerRadius(innerRadius)
+            .outerRadius(outerRadius);
+    //Set up groups
+    _this.arcIndex = _this.arcIndex + 1;
+
+    var clazz = "arc" + _this.arcIndex;
+
     var storeMetadataWithArc = function(d) {
         d.arc = arc;
-        d.length = ds.length;
-        d.parentDs = ds;
+        d.length = dataset.length;
     };
-    var customArcTween = function(d) {
-        var start = {
-            startAngle: 0,
-            endAngle: 0
-        };
-        var interpolate = d3.interpolate(start, d);
-        return function(t) {
-            return d.arc(interpolate(t));
-        };
-    };
-    for (var i = depth; i >= 1; i--) {
-        //console.log("i = " + i);
-        var outRad = object.config.donutRadius + (((outerRadius-object.config.donutRadius) / depth) * i);
-        //console.log("outRad = " + outRad);
-        var inRad = outRad - outerRadius / depth;
-        //console.log("inRad = " + inRad);
-        if(i==1){
-            inRad = object.config.donutRadius;
-        }
-        var arc = d3.svg.arc().innerRadius(inRad)
-            .outerRadius(outRad);
-        //Set up groups
-        var clazz = "arc" + i;
-        var result = [];
-        var ds = this.setDataSet(dataset, i, 1, result);
-        //console.log("ds* = " + ds);
-        var arcs = svg.selectAll("g." + clazz)
-            .data(pie(ds))
-            .enter()
-            .append("g")
-            .attr("class", "arc " + clazz)
-            .attr("transform",
-                "translate(" + outerRadius + "," + outerRadius + ")")
-            .on("dblclick", dblclick);
 
-        //Draw arc paths
-        paths = arcs.append("path").attr("fill", arcfill);
+    var arcs = svg.selectAll("g." + clazz)
+        .data(pie(dataset))
+        .enter()
+        .append("g")
+        .attr("class", "arc " + clazz)
+        .attr("transform",
+                "translate(" + (totalRadius) + "," + (totalRadius) + ")")
+        .on("dblclick", dblclick);
 
-        paths.on("mouseover", mouseover);
+    //Draw arc paths
+    var paths = arcs.append("path")
+                .attr("fill", color(_this.arcIndex));
 
-        paths.on("mouseout", mouseout);
+    paths.on("mouseover", _this.mouseover);
 
-        paths.each(storeMetadataWithArc);
+    paths.on("mouseout", _this.mouseout);
 
-        paths
-            .transition()
-            .duration(object.config.transitionDuration)
-            .ease(object.config.transition)
-            .attrTween("d", customArcTween);
-        prevDsLength += ds.length;
+    paths.each(storeMetadataWithArc);
 
-        arcsArray[i] = arcs;
-    }
+    paths.transition()
+        .duration(_this.config.transitionDuration)
+        .delay(_this.config.transitionDuration*(_this.arcIndex-1))
+        .ease(_this.config.transition)
+        .attrTween("d", _this.customArcTween);
 
-    var textTransform = function(d) {
-        return "translate(" + d.arc.centroid(d) + ")";
-    };
-    var textText = function(d) {
-        return object.config.label(d.data);
-    };
-    var textTitle = function(d) {
-        return d.data[object.config.value];
-    };
-    for (var k = 1; k <= depth; k++) {
+    //paths.each(storeMetadataWithArc);
+
         //Labels
-        arcsArray[k].append("text")
-            .transition()
-            .ease(object.config.transition)
-            .duration(object.config.transitionDuration)
-            .delay(object.config.transitionDuration)
-            .attr("transform", textTransform)
-            .attr("text-anchor", "middle")
-            .text(textText)
-            .attr("title", textTitle);
+    var texts = arcs.append("text")
+        .attr("x", function(){
+            return parentCentroid[0];
+        })
+        .attr("y", function(){
+            return parentCentroid[1];
+        })
+        .transition()
+        .ease(_this.config.transition)
+        .duration(_this.config.transitionDuration)
+        .delay(_this.config.transitionDuration*(_this.arcIndex-1))
+        .attr("transform", function(d){
+            var a = [];
+            a[0] = arc.centroid(d)[0] - parentCentroid[0];
+            a[1] = arc.centroid(d)[1] - parentCentroid[1];
+            return "translate(" + a + ")";
+        })
+        .attr("text-anchor", "middle")
+        .text(_this.textText)
+        .attr("title", _this.textTitle);
+        
+    
+        
+    console.log("paths.data() = " + paths.data());
+    for(var j=0; j< dataset.length; j++){
+        console.log("dataset[j] = " + dataset[j]);
+        //console.log("paths.data()[j] = " + paths.data()[j]);
+        if(dataset[j][_this.config.inner] !== undefined){
+            _this.draw(svg, color, ++colorIndex, totalRadius, dataset[j][_this.config.inner], originalDataset, originalDatasetLength, innerRadius+radiusDelta, outerRadius+radiusDelta, radiusDelta, paths.data()[j].startAngle, paths.data()[j].endAngle, arc.centroid(paths.data()[j]));
+        }
     }
+
 
 };
 
+
+
 psd3.Pie.prototype.reDrawPie = function(d, ds) {
     var tmp = [];
-    d3.select("#"+this.config.containerId+"_svg").remove();
-    d3.select("#"+this.config.containerId+"_tooltip").remove();
+    d3.select("#"+_this.config.containerId+"_svg").remove();
+    //d3.select("#"+this.config.containerId+"_tooltip").remove();
     if (d.length == 1) {
-        tmp = this.zoomStack.pop();
+        tmp = _this.zoomStack.pop();
     } else {
         tmp.push(d.data);
-        this.zoomStack.push(ds);
+        _this.zoomStack.push(ds);
     }
-    this.drawPie(tmp);
+    _this.drawPie(tmp);
 };
