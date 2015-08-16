@@ -11,7 +11,7 @@ psd3.Graph = function(config) {
         value: "value",
         inner: "inner",
         label: function(d) {
-            return d.label;
+            return d.data.value;
         },
         tooltip: function(d) {
             if (_this.config.value !== undefined) {

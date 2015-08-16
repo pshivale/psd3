@@ -29,17 +29,37 @@ psd3.Pie.prototype.findMaxDepth = function(dataset){
     return currentLevel;
 }
 
+psd3.Pie.prototype.mouseover = function(d) {
+        d3.select("#"+_this.tooltipId)
+            .style("left", d3.event.clientX + "px")
+            .style("top", d3.event.clientY + "px")
+            .select("#value")
+            .html(_this.config.tooltip(d.data, _this.config.label));
+        d3.select("#" + _this.tooltipId).classed("psd3Hidden", false);
+    };
+psd3.Pie.prototype.mouseout = function() {
+        d3.select("#" + _this.tooltipId).classed("psd3Hidden", true);
+    };
+
 psd3.Pie.prototype.drawPie = function(dataset){
     _this = this;
     arcIndex = 0;
     var width = 400;
     var height = 400;
-    var svg = d3.select("#"+"chartContainer")
+    var svg = d3.select("#"+_this.config.containerId)
         .append("svg")
-        .attr("id", "chartContainer"+"_svg")
+        .attr("id", _this.config.containerId+"_svg")
         .attr("width", width)
         .attr("height", height)
         .style("background-color", "#eee");
+    _this.tooltipId = _this.config.containerId+"_tooltip";
+    var tooltipDiv = d3.select("#"+_this.config.containerId).append("div")
+        .attr("id", _this.tooltipId)
+        .attr("class", "psd3Hidden psd3Tooltip");
+    tooltipDiv.append("p")
+        .append("span")
+        .attr("id", "value")
+        .text("100%");
     // to contain pie cirlce
     var radius;
     if(width>height){
@@ -72,10 +92,6 @@ psd3.Pie.prototype.textTransform = function(d) {
     return "translate(" + d.arc.centroid(d) + ")";
 };
 
-psd3.Pie.prototype.textText = function(d) {
-    return d.value;
-};
-
 psd3.Pie.prototype.textTitle = function(d) {
     return d.value;
 };
@@ -93,6 +109,10 @@ psd3.Pie.prototype.draw = function(svg, color, colorIndex, totalRadius, dataset,
     console.log("colorIndex = " + colorIndex);
     // console.log("startAngle = " + startAngle);
     // console.log("endAngle = " + endAngle);
+
+    psd3.Pie.prototype.textText = function(d) {
+        return _this.config.label(d);
+    };
 
     var pie = d3.layout.pie();
     pie.value(function(d) {
@@ -112,7 +132,7 @@ psd3.Pie.prototype.draw = function(svg, color, colorIndex, totalRadius, dataset,
     console.log(values);
 
     var dblclick = function(d) {
-        reDrawPie(d, originalDataset);
+        _this.reDrawPie(d, originalDataset);
     };
 
     var arc = d3.svg.arc().innerRadius(innerRadius)
@@ -137,6 +157,10 @@ psd3.Pie.prototype.draw = function(svg, color, colorIndex, totalRadius, dataset,
     //Draw arc paths
     var paths = arcs.append("path")
                 .attr("fill", color(arcIndex));
+
+    paths.on("mouseover", _this.mouseover);
+
+    paths.on("mouseout", _this.mouseout);
 
     paths.each(storeMetadataWithArc);
 
@@ -188,13 +212,13 @@ psd3.Pie.prototype.draw = function(svg, color, colorIndex, totalRadius, dataset,
 
 psd3.Pie.prototype.reDrawPie = function(d, ds) {
     var tmp = [];
-    d3.select("#"+"chartContainer"+"_svg").remove();
+    d3.select("#"+_this.config.containerId+"_svg").remove();
     //d3.select("#"+this.config.containerId+"_tooltip").remove();
     if (d.length == 1) {
-        tmp = zoomStack.pop();
+        tmp = _this.zoomStack.pop();
     } else {
         tmp.push(d.data);
-        zoomStack.push(ds);
+        _this.zoomStack.push(ds);
     }
-    drawPie(tmp);
+    _this.drawPie(tmp);
 };
