@@ -4,7 +4,17 @@ var psd3 = psd3 || {};
 psd3.Pie = function(config){
     psd3.Graph.call(this, config);
     this.zoomStack = [];
+    var pos = "top";
+    if(this.config.heading !== undefined && this.config.heading.pos !== undefined){
+        pos = this.config.heading.pos;
+    }
+    if(pos=="top"){
+        this.setHeading();    
+    }
     this.drawPie(config.data);
+    if(pos=="bottom"){
+        this.setHeading();    
+    }
 }
 
 psd3.Pie.prototype = Object.create(psd3.Graph.prototype);
@@ -26,6 +36,19 @@ psd3.Pie.prototype.findMaxDepth = function(dataset){
     currentLevel = 1 + maxOfInner;
     return currentLevel;
 }
+
+psd3.Pie.prototype.setHeading = function(){
+    if(this.config.heading !== undefined){
+        d3.select("#"+this.config.containerId)
+            .append("div")
+            .style("text-align","center")
+            .style("width", ""+this.config.width+"px")
+            .style("padding-top","20px")
+            .style("padding-bottom","20px")
+            .append("strong")
+            .text(this.config.heading.text);
+    }
+};
 
 psd3.Pie.prototype.mouseover = function(d) {
         d3.select("#"+_this.tooltipId)
@@ -49,8 +72,7 @@ psd3.Pie.prototype.drawPie = function(dataset){
         .append("svg")
         .attr("id", _this.config.containerId+"_svg")
         .attr("width", _this.config.width)
-        .attr("height", _this.config.height)
-        .style("background-color", "#eee");
+        .attr("height", _this.config.height);
     _this.tooltipId = _this.config.containerId+"_tooltip";
     var tooltipDiv = d3.select("#"+_this.config.containerId).append("div")
         .attr("id", _this.tooltipId)
@@ -168,9 +190,9 @@ psd3.Pie.prototype.draw = function(svg, color, colorIndex, totalRadius, dataset,
     paths.each(storeMetadataWithArc);
 
     paths.transition()
-        .duration(1000)
-        .delay(1000*(_this.arcIndex-1))
-        .ease("linear")
+        .duration(_this.config.transitionDuration)
+        .delay(_this.config.transitionDuration*(_this.arcIndex-1))
+        .ease(_this.config.transition)
         .attrTween("d", _this.customArcTween);
 
     //paths.each(storeMetadataWithArc);
@@ -184,9 +206,9 @@ psd3.Pie.prototype.draw = function(svg, color, colorIndex, totalRadius, dataset,
             return parentCentroid[1];
         })
         .transition()
-        .ease("linear")
-        .duration(1000)
-        .delay(1000*(_this.arcIndex-1))
+        .ease(_this.config.transition)
+        .duration(_this.config.transitionDuration)
+        .delay(_this.config.transitionDuration*(_this.arcIndex-1))
         .attr("transform", function(d){
             var a = [];
             a[0] = arc.centroid(d)[0] - parentCentroid[0];
