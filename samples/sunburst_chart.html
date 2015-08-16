@@ -16,9 +16,9 @@
 
 <div class="container">
 	<div class="well">
-		<h2><a href="../index.html">psd3</a> - Multi-level Donut Chart</h2>
+		<h2><a href="../index.html">psd3</a> - Sunburst Chart</h2>
 		<ul>
-		<li><a href="https://github.com/pshivale/psd3/blob/gh-pages/samples/donut_chart_multilevel.html">View source on github</a></li>
+		<li><a href="https://github.com/pshivale/psd3/blob/gh-pages/samples/sunburst_chart.html">View source on github</a></li>
 			<li>Double click a section to drill down!</li>
 		  	<li>Double click center section to drill back up!</li>
 		</ul>
@@ -36,12 +36,10 @@
 	        place: "Pune",
 	        drilldown: [{
 	            noOfColleges: 10,
-	            place: "Yerawada",
-	            drilldown: []
+	            place: "Yerawada"
 	        }, {
 	            noOfColleges: 5,
-	            place: "Kothrud",
-	            drilldown: []
+	            place: "Kothrud"
 	        }]
 	    }, {
 	        noOfColleges: 10,
@@ -49,11 +47,20 @@
 	        drilldown: [{
 	            noOfColleges: 8,
 	            place: "Bandra",
-	            drilldown: []
+	            drilldown:
+	            [
+	            	{
+		            	noOfColleges: 3,
+		            	place: "Turner Road"
+	            	},
+	            	{
+		            	noOfColleges: 5,
+		            	place: "Perry Road"
+	            	}
+	            ]
 	        }, {
 	            noOfColleges: 2,
-	            place: "Varali",
-	            drilldown: []
+	            place: "Varali"
 	        }]
 	    }]
 	}, {
@@ -61,40 +68,22 @@
 	    place: "Gujarat",
 	    drilldown: [{
 	        noOfColleges: 20,
-	        place: "Surat",
-	        drilldown: [{
-	            noOfColleges: 15,
-	            place: "Danti",
-	            drilldown: []
-	        }, {
-	            noOfColleges: 5,
-	            place: "Hajira",
-	            drilldown: []
-	        }]
+	        place: "Surat"
 	    }, {
 	        noOfColleges: 30,
 	        place: "Rajkot",
 	        drilldown: [{
 	            noOfColleges: 12,
 	            place: "Patan",
-	            drilldown: []
+	            
 	        }, {
 	            noOfColleges: 18,
 	            place: "Modhera",
-	            drilldown: []
+	            
 	        }]
 	    }, {
 	        noOfColleges: 4,
-	        place: "Godhra",
-	        drilldown: [{
-	            place: "Barda",
-	            noOfColleges: 2,
-	            drilldown: []
-	        }, {
-	            place: "Porbandar",
-	            noOfColleges: 2,
-	            drilldown: []
-	        }]
+	        place: "Godhra"
 	    }]
 	}, {
 	    noOfColleges: 20,
@@ -105,48 +94,30 @@
 	        drilldown: [{
 	            place: "Devas",
 	            noOfColleges: 2,
-	            drilldown: []
+	            
 	        }, {
 	            place: "Dhar",
 	            noOfColleges: 2,
-	            drilldown: []
+	            
 	        }]
 	    }, {
 	        noOfColleges: 5,
-	        place: "Bhopal",
-	        drilldown: [{
-	            place: "Vidish",
-	            noOfColleges: 3,
-	            drilldown: []
-	        }, {
-	            place: "Raisen",
-	            noOfColleges: 2,
-	            drilldown: []
-	        }]
+	        place: "Bhopal"
 	    }, {
 	        noOfColleges: 8,
 	        place: "Ujjain",
 	        drilldown: [{
 	            place: "Shajapur",
 	            noOfColleges: 2,
-	            drilldown: []
+	            
 	        }, {
 	            place: "Ratlam",
 	            noOfColleges: 6,
-	            drilldown: []
+	            
 	        }]
 	    }, {
 	        noOfColleges: 3,
-	        place: "Sachi",
-	        drilldown: [{
-	            place: "Sagar",
-	            noOfColleges: 1,
-	            drilldown: []
-	        }, {
-	            place: "Ashoknagar",
-	            noOfColleges: 2,
-	            drilldown: []
-	        }]
+	        place: "Sachi"
 	    }]
 	}];
 
@@ -167,8 +138,8 @@
 	    tooltip: function(d) {
 	        return "<p>There are " + d.noOfColleges + " medical colleges in " + d.place + ".</p>";
 	    },
-	    transition: "linear",
-	    transitionDuration: 500,
+	    transition: "bounce",
+	    transitionDuration: 1000,
 	    donutRadius: 50
 	};
 
