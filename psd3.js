@@ -24,6 +24,9 @@ psd3.Graph = function(config) {
         transition: "linear",
         transitionDuration: 1000,
         donutRadius: 0,
+        gradient: false,
+        gradientDelta: 1,
+        colors: d3.scale.category20()
     };
     /*console.log("before defaults");
     for(var property in config){
@@ -124,6 +127,7 @@ psd3.Pie.prototype.drawPie = function(dataset) {
         .append("span")
         .attr("id", "value")
         .text("100%");
+
     // to contain pie cirlce
     var radius;
     if (_this.config.width > _this.config.height) {
@@ -135,10 +139,9 @@ psd3.Pie.prototype.drawPie = function(dataset) {
     var maxDepth = _this.findMaxDepth(dataset);
     //console.log("maxDepth = " + maxDepth);
     var outerRadius = innerRadius + (radius - innerRadius) / maxDepth;
-    var color = d3.scale.category20();
     var originalOuterRadius = outerRadius;
     var radiusDelta = outerRadius - innerRadius;
-    _this.draw(svg, color, 0, radius, dataset, dataset, dataset.length, innerRadius, outerRadius, radiusDelta, 0, 360 * 22 / 7 / 180, [0, 0]);
+    _this.draw(svg, radius, dataset, dataset, dataset.length, innerRadius, outerRadius, radiusDelta, 0, 360 * 22 / 7 / 180, [0, 0]);
 };
 
 
@@ -161,7 +164,7 @@ psd3.Pie.prototype.textTitle = function(d) {
     return d.data[_this.config.value];
 };
 
-psd3.Pie.prototype.draw = function(svg, color, colorIndex, totalRadius, dataset, originalDataset, originalDatasetLength, innerRadius, outerRadius, radiusDelta, startAngle, endAngle, parentCentroid) {
+psd3.Pie.prototype.draw = function(svg, totalRadius, dataset, originalDataset, originalDatasetLength, innerRadius, outerRadius, radiusDelta, startAngle, endAngle, parentCentroid) {
     _this = this;
     //console.log("**** draw ****");
     //console.log("dataset = " + dataset);
@@ -171,7 +174,6 @@ psd3.Pie.prototype.draw = function(svg, color, colorIndex, totalRadius, dataset,
     //console.log("parentCentroid = " + parentCentroid);
     // console.log("innerRadius = " + innerRadius);
     // console.log("outerRadius = " + outerRadius);
-    //console.log("colorIndex = " + colorIndex);
     // console.log("startAngle = " + startAngle);
     // console.log("endAngle = " + endAngle);
 
@@ -219,9 +221,41 @@ psd3.Pie.prototype.draw = function(svg, color, colorIndex, totalRadius, dataset,
             "translate(" + (totalRadius) + "," + (totalRadius) + ")")
         .on("dblclick", dblclick);
 
+    var gradient = svg.append("svg:defs")
+        .append("svg:linearGradient")
+        .attr("id", "gradient_" + _this.arcIndex)
+        .attr("x1", "0%")
+        .attr("y1", "0%")
+        .attr("x2", "100%")
+        .attr("y2", "100%")
+        .attr("spreadMethod", "pad");
+
+    var startColor, endColor;
+    if (_this.config.gradient) {
+        // always make index even. d3 color20 radiant look better that way
+        var index = Math.abs((_this.arcIndex % (20 / _this.config.gradientDelta) - 1) * _this.config.gradientDelta);
+        var endIndex = Math.abs(index + _this.config.gradientDelta - 1);
+        console.log("arcindex = " + _this.arcIndex + "(" + index + ", " + endIndex);
+        startColor = _this.config.colors(index);
+        endColor = _this.config.colors(endIndex);
+    } else {
+        startColor = endColor = _this.config.colors(this.arcIndex);
+    }
+    console.log("color = " + startColor + ", " + endColor);
+    gradient.append("svg:stop")
+        .attr("offset", "0%")
+        .attr("stop-color", startColor)
+        .attr("stop-opacity", 1);
+
+    gradient.append("svg:stop")
+        .attr("offset", "100%")
+        .attr("stop-color", endColor)
+        .attr("stop-opacity", 1);
+
     //Draw arc paths
     var paths = arcs.append("path")
-        .attr("fill", color(_this.arcIndex));
+        //.attr("fill", color(_this.arcIndex));
+        .attr("fill", "url(#gradient_" + _this.arcIndex + ")");
 
     paths.on("mouseover", _this.mouseover);
 
@@ -266,7 +300,7 @@ psd3.Pie.prototype.draw = function(svg, color, colorIndex, totalRadius, dataset,
         //console.log("dataset[j] = " + dataset[j]);
         //console.log("paths.data()[j] = " + paths.data()[j]);
         if (dataset[j][_this.config.inner] !== undefined) {
-            _this.draw(svg, color, ++colorIndex, totalRadius, dataset[j][_this.config.inner], originalDataset, originalDatasetLength, innerRadius + radiusDelta, outerRadius + radiusDelta, radiusDelta, paths.data()[j].startAngle, paths.data()[j].endAngle, arc.centroid(paths.data()[j]));
+            _this.draw(svg, totalRadius, dataset[j][_this.config.inner], originalDataset, originalDatasetLength, innerRadius + radiusDelta, outerRadius + radiusDelta, radiusDelta, paths.data()[j].startAngle, paths.data()[j].endAngle, arc.centroid(paths.data()[j]));
         }
     }
 
