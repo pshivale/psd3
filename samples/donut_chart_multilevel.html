@@ -169,7 +169,10 @@
 	    },
 	    transition: "linear",
 	    transitionDuration: 500,
-	    donutRadius: 50
+	    donutRadius: 50,
+        gradient: true,
+        colors: d3.scale.category20(),
+        labelColor: "white"
 	};
 
 	var samplePie = new psd3.Pie(config);
