@@ -128,9 +128,9 @@ psd3 should work with the latest [d3.js](http://d3js.org/) version 3.5.3 and lat
 	// default is false
 	gradient: true,
         
-        // color of the label
-        // default is black
-        labelColor: "white"
+    // color of the label
+    // default is black
+    labelColor: "white"
 }
 ```
 ### Style
