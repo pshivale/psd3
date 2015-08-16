@@ -1,70 +1,26 @@
+
+var psd3 = psd3 || {};
+
 var arcIndex = 0;
 
-var pie = function(){
-    var dataset = [
-                    {
-                        value: 25,
-                        inner: 
-                        [
-                            {
-                                value: 10,
-                                inner: 
-                                [
-                                    {
-                                        value: 3
-                                    },
-                                    {
-                                        value: 7
-                                    }
-                                   ]
-                            },
-                            {
-                                value: 15
-                            }
-                        ]
-                    },
-                    {
-                        value: 50,
-                        inner:
-                        [
-                            {
-                                value: 15
-                            },
-                            {
-                                value: 35,
-                                inner:
-                                [
-                                    {
-                                        value: 5
-                                    },
-                                    {
-                                        value: 30,
-                                        inner:
-                                        [
-                                            {
-                                                value:10
-                                            },
-                                            {
-                                                value: 20
-                                            }
-                                        ]
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ];
-    drawPie(dataset);
+psd3.Pie = function(config){
+    psd3.Graph.call(this, config);
+    this.zoomStack = [];
+    this.drawPie(config.data);
 }
 
-var findMaxDepth = function(dataset){
+psd3.Pie.prototype = Object.create(psd3.Graph.prototype);
+
+psd3.Pie.prototype.constructor = psd3.Pie;
+
+psd3.Pie.prototype.findMaxDepth = function(dataset){
     if(dataset === null || dataset === undefined){
         return 0;
     }
     var currentLevel;
     var maxOfInner=0;
     for(var i=0;i<dataset.length;i++){
-        var maxInnerLevel = findMaxDepth(dataset[i].inner);
+        var maxInnerLevel = this.findMaxDepth(dataset[i].inner);
         if(maxOfInner<maxInnerLevel){
             maxOfInner = maxInnerLevel;
         }
@@ -73,7 +29,8 @@ var findMaxDepth = function(dataset){
     return currentLevel;
 }
 
-var drawPie = function(dataset){
+psd3.Pie.prototype.drawPie = function(dataset){
+    _this = this;
     arcIndex = 0;
     var width = 400;
     var height = 400;
@@ -90,17 +47,17 @@ var drawPie = function(dataset){
     }else{
         radius = height/2;
     }
-    var innerRadius = 30;
-    var depth = findMaxDepth(dataset);
+    var innerRadius = 50;
+    var depth = _this.findMaxDepth(dataset);
     var outerRadius = innerRadius + (radius-innerRadius)/depth;
     var color = d3.scale.category20();
     var originalOuterRadius = outerRadius;
     var radiusDelta = outerRadius - innerRadius;
-    draw(svg, color, 0, radius, dataset, dataset, dataset.length, innerRadius, outerRadius, radiusDelta, 0, 360*22/7/180,[0,0]);
+    _this.draw(svg, color, 0, radius, dataset, dataset, dataset.length, innerRadius, outerRadius, radiusDelta, 0, 360*22/7/180,[0,0]);
 }
 
 
-var customArcTween = function(d) {
+psd3.Pie.prototype.customArcTween = function(d) {
     var start = {
         startAngle: d.startAngle,
         endAngle: d.startAngle
@@ -111,17 +68,20 @@ var customArcTween = function(d) {
     };
 };
 
-var textTransform = function(d) {
+psd3.Pie.prototype.textTransform = function(d) {
     return "translate(" + d.arc.centroid(d) + ")";
 };
-var textText = function(d) {
-    return d.value;
-};
-var textTitle = function(d) {
+
+psd3.Pie.prototype.textText = function(d) {
     return d.value;
 };
 
-var draw = function(svg, color, colorIndex, totalRadius, dataset, originalDataset, originalDatasetLength, innerRadius, outerRadius, radiusDelta, startAngle, endAngle, parentCentroid) {
+psd3.Pie.prototype.textTitle = function(d) {
+    return d.value;
+};
+
+psd3.Pie.prototype.draw = function(svg, color, colorIndex, totalRadius, dataset, originalDataset, originalDatasetLength, innerRadius, outerRadius, radiusDelta, startAngle, endAngle, parentCentroid) {
+    _this = this;
     console.log("**** draw ****");
     console.log("dataset = " + dataset);
     if(dataset === null || dataset ===undefined){
@@ -184,7 +144,7 @@ var draw = function(svg, color, colorIndex, totalRadius, dataset, originalDatase
         .duration(1000)
         .delay(1000*(arcIndex-1))
         .ease("linear")
-        .attrTween("d", customArcTween);
+        .attrTween("d", _this.customArcTween);
 
     //paths.each(storeMetadataWithArc);
 
@@ -207,8 +167,8 @@ var draw = function(svg, color, colorIndex, totalRadius, dataset, originalDatase
             return "translate(" + a + ")";
         })
         .attr("text-anchor", "middle")
-        .text(textText)
-        .attr("title", textTitle);
+        .text(_this.textText)
+        .attr("title", _this.textTitle);
         
     
         
@@ -217,16 +177,16 @@ var draw = function(svg, color, colorIndex, totalRadius, dataset, originalDatase
         console.log("dataset[j] = " + dataset[j]);
         //console.log("paths.data()[j] = " + paths.data()[j]);
         if(dataset[j].inner !== undefined){
-            draw(svg, color, ++colorIndex, totalRadius, dataset[j].inner, originalDataset, originalDatasetLength, innerRadius+radiusDelta, outerRadius+radiusDelta, radiusDelta, paths.data()[j].startAngle, paths.data()[j].endAngle, arc.centroid(paths.data()[j]));
+            _this.draw(svg, color, ++colorIndex, totalRadius, dataset[j].inner, originalDataset, originalDatasetLength, innerRadius+radiusDelta, outerRadius+radiusDelta, radiusDelta, paths.data()[j].startAngle, paths.data()[j].endAngle, arc.centroid(paths.data()[j]));
         }
     }
 
 
 };
 
-var zoomStack = [];
 
-var reDrawPie = function(d, ds) {
+
+psd3.Pie.prototype.reDrawPie = function(d, ds) {
     var tmp = [];
     d3.select("#"+"chartContainer"+"_svg").remove();
     //d3.select("#"+this.config.containerId+"_tooltip").remove();
