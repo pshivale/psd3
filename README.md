@@ -1,6 +1,6 @@
-## psd3 - Javascript chart library based on d3.js
+## psd3 - Javascript pie chart library based on d3.js
 
-Javascript pie chart library based on d3.js that supports multi-level pie and donut charts.
+Javascript pie chart library based on d3.js that supports multi-level pie charts, donut charts and sunburst charts.
 
 ### Demos
 
@@ -91,7 +91,7 @@ psd3 should work with the latest [d3.js](http://d3js.org/) version 3.5.3 and lat
 	// labels shown in the graph. Data object is available as d.
 	// default label is the "label" field
 	label: function(d) {
-	    return d.place + ":" + d.noOfColleges;
+	    return d.data.place + ":" + d.data.noOfColleges;
 	},
 	
 	// field to be used as value in graph
