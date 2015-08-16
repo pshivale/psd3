@@ -118,7 +118,19 @@ psd3 should work with the latest [d3.js](http://d3js.org/) version 3.5.3 and lat
 	
 	// innerRadius for donut charts
 	// default is 0
-	donutRadius: 50
+	donutRadius: 50,
+	
+	// colors function that accepts an index and returns color string
+	// default is d3.scale.category20()
+	colors: d3.scale.category20(),
+	
+	// if true linear gradient is applied. gradient start with color(i) and ends with color(i+1) and so on..
+	// default is false
+	gradient: true,
+        
+        // color of the label
+        // default is black
+        labelColor: "white"
 }
 ```
 ### Style
