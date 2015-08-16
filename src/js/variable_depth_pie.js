@@ -1,8 +1,6 @@
 
 var psd3 = psd3 || {};
 
-var arcIndex = 0;
-
 psd3.Pie = function(config){
     psd3.Graph.call(this, config);
     this.zoomStack = [];
@@ -42,8 +40,11 @@ psd3.Pie.prototype.mouseout = function() {
     };
 
 psd3.Pie.prototype.drawPie = function(dataset){
+    if(dataset === null || dataset === undefined || dataset.length < 1){
+        return;
+    }
     _this = this;
-    arcIndex = 0;
+    _this.arcIndex = 0;
     var svg = d3.select("#"+_this.config.containerId)
         .append("svg")
         .attr("id", _this.config.containerId+"_svg")
@@ -99,7 +100,7 @@ psd3.Pie.prototype.draw = function(svg, color, colorIndex, totalRadius, dataset,
     _this = this;
     console.log("**** draw ****");
     console.log("dataset = " + dataset);
-    if(dataset === null || dataset ===undefined){
+    if(dataset === null || dataset === undefined || dataset.length < 1){
         return;
     }
     console.log("parentCentroid = " + parentCentroid);
@@ -138,7 +139,9 @@ psd3.Pie.prototype.draw = function(svg, color, colorIndex, totalRadius, dataset,
     var arc = d3.svg.arc().innerRadius(innerRadius)
             .outerRadius(outerRadius);
     //Set up groups
-    var clazz = "arc" + arcIndex++;
+    _this.arcIndex = _this.arcIndex + 1;
+
+    var clazz = "arc" + _this.arcIndex;
 
     var storeMetadataWithArc = function(d) {
         d.arc = arc;
@@ -156,7 +159,7 @@ psd3.Pie.prototype.draw = function(svg, color, colorIndex, totalRadius, dataset,
 
     //Draw arc paths
     var paths = arcs.append("path")
-                .attr("fill", color(arcIndex));
+                .attr("fill", color(_this.arcIndex));
 
     paths.on("mouseover", _this.mouseover);
 
@@ -166,7 +169,7 @@ psd3.Pie.prototype.draw = function(svg, color, colorIndex, totalRadius, dataset,
 
     paths.transition()
         .duration(1000)
-        .delay(1000*(arcIndex-1))
+        .delay(1000*(_this.arcIndex-1))
         .ease("linear")
         .attrTween("d", _this.customArcTween);
 
@@ -183,7 +186,7 @@ psd3.Pie.prototype.draw = function(svg, color, colorIndex, totalRadius, dataset,
         .transition()
         .ease("linear")
         .duration(1000)
-        .delay(1000*(arcIndex-1))
+        .delay(1000*(_this.arcIndex-1))
         .attr("transform", function(d){
             var a = [];
             a[0] = arc.centroid(d)[0] - parentCentroid[0];
