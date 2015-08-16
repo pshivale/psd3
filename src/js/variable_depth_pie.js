@@ -56,15 +56,47 @@ var pie = function(){
                 ];
     drawPie(dataset);
 }
+
+var findMaxDepth = function(dataset){
+    if(dataset === null || dataset === undefined){
+        return 0;
+    }
+    var currentLevel;
+    var maxOfInner=0;
+    for(var i=0;i<dataset.length;i++){
+        var maxInnerLevel = findMaxDepth(dataset[i].inner);
+        if(maxOfInner<maxInnerLevel){
+            maxOfInner = maxInnerLevel;
+        }
+    }
+    currentLevel = 1 + maxOfInner;
+    return currentLevel;
+}
+
 var drawPie = function(dataset){
     arcIndex = 0;
+    var width = 400;
+    var height = 400;
     var svg = d3.select("#"+"chartContainer")
         .append("svg")
         .attr("id", "chartContainer"+"_svg")
-        .attr("width", 600)
-        .attr("height", 600);
+        .attr("width", width)
+        .attr("height", height)
+        .style("background-color", "#eee");
+    // to contain pie cirlce
+    var radius;
+    if(width>height){
+        radius = width/2;
+    }else{
+        radius = height/2;
+    }
+    var innerRadius = 30;
+    var depth = findMaxDepth(dataset);
+    var outerRadius = innerRadius + (radius-innerRadius)/depth;
     var color = d3.scale.category20();
-    draw(svg, color, 0, 300, dataset, dataset, dataset.length, 0, 50, 0, 360*22/7/180,[0,0]);
+    var originalOuterRadius = outerRadius;
+    var radiusDelta = outerRadius - innerRadius;
+    draw(svg, color, 0, radius, dataset, dataset, dataset.length, innerRadius, outerRadius, radiusDelta, 0, 360*22/7/180,[0,0]);
 }
 
 
@@ -89,7 +121,7 @@ var textTitle = function(d) {
     return d.value;
 };
 
-var draw = function(svg, color, colorIndex, totalRadius, dataset, originalDataset, originalDatasetLength, innerRadius, outerRadius, startAngle, endAngle, parentCentroid) {
+var draw = function(svg, color, colorIndex, totalRadius, dataset, originalDataset, originalDatasetLength, innerRadius, outerRadius, radiusDelta, startAngle, endAngle, parentCentroid) {
     console.log("**** draw ****");
     console.log("dataset = " + dataset);
     if(dataset === null || dataset ===undefined){
@@ -185,7 +217,7 @@ var draw = function(svg, color, colorIndex, totalRadius, dataset, originalDatase
         console.log("dataset[j] = " + dataset[j]);
         //console.log("paths.data()[j] = " + paths.data()[j]);
         if(dataset[j].inner !== undefined){
-            draw(svg, color, ++colorIndex, totalRadius, dataset[j].inner, originalDataset, originalDatasetLength, innerRadius+50, outerRadius+50, paths.data()[j].startAngle, paths.data()[j].endAngle, arc.centroid(paths.data()[j]));
+            draw(svg, color, ++colorIndex, totalRadius, dataset[j].inner, originalDataset, originalDatasetLength, innerRadius+radiusDelta, outerRadius+radiusDelta, radiusDelta, paths.data()[j].startAngle, paths.data()[j].endAngle, arc.centroid(paths.data()[j]));
         }
     }
 
