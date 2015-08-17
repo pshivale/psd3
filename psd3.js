@@ -26,7 +26,9 @@ psd3.Graph = function(config) {
         donutRadius: 0,
         gradient: false,
         colors: d3.scale.category20(),
-        labelColor: "black"
+        labelColor: "black",
+        drilldownTransition: "linear",
+        drilldownTransitionDuration: 0
     };
     /*console.log("before defaults");
     for(var property in config){
@@ -232,7 +234,6 @@ psd3.Pie.prototype.draw = function(svg, totalRadius, dataset, originalDataset, o
 
     var startColor, endColor;
     if (_this.config.gradient) {
-        // always make index even. d3 color20 radiant look better that way
         var index = 2 * _this.arcIndex;
         var endIndex = index + 1;
         //console.log("arcindex = " + _this.arcIndex + "(" + index + ", " + endIndex);
@@ -312,13 +313,20 @@ psd3.Pie.prototype.draw = function(svg, totalRadius, dataset, originalDataset, o
 
 psd3.Pie.prototype.reDrawPie = function(d, ds) {
     var tmp = [];
-    d3.select("#" + _this.config.containerId + "_svg").remove();
-    //d3.select("#"+this.config.containerId+"_tooltip").remove();
-    if (d.length == 1) {
-        tmp = _this.zoomStack.pop();
-    } else {
-        tmp.push(d.data);
-        _this.zoomStack.push(ds);
-    }
-    _this.drawPie(tmp);
+    d3.select("#" + _this.tooltipId).remove();
+    d3.select("#" + _this.config.containerId + "_svg") //.remove();
+        .transition()
+        .ease(_this.config.drilldownTransition)
+        .duration(_this.config.drilldownTransitionDuration)
+        .style("height", 0)
+        .remove()
+        .each("end", function() {
+            if (d.length == 1) {
+                tmp = _this.zoomStack.pop();
+            } else {
+                tmp.push(d.data);
+                _this.zoomStack.push(ds);
+            }
+            _this.drawPie(tmp);
+        });
 };

@@ -26,7 +26,9 @@ psd3.Graph = function(config) {
         donutRadius: 0,
         gradient: false,
         colors: d3.scale.category20(),
-        labelColor: "black"
+        labelColor: "black",
+        drilldownTransition: "linear",
+        drilldownTransitionDuration: 0
     };
     /*console.log("before defaults");
     for(var property in config){
