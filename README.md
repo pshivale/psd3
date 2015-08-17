@@ -131,13 +131,30 @@ psd3 should work with the latest [d3.js](http://d3js.org/) version 3.5.3 and lat
     // color of the label
     // default is black
     labelColor: "white"
+
+    // color of the pie slice border stroke
+    // default is white
+    stroke: "#eee",
+
+    // stroke width of pie slice border
+    // default is 2
+    strokeWidth: 3,
+
+    // fade out transition of current view when drilling down
+    // default is linear
+    drilldownTransition: "linear",
+
+    // duration of fade out transition of current view when drilling down
+    // default is 0
+    drilldownTransitionDuration: 1000,
+
+    // highlight color of pie slice when mouse over
+    // default is orange
+    highlightColor: "#c00"
 }
 ```
 ### Style
 
 You can change the style of some of the elements of the chart in psd3.css
 
-* Highlight color of the pie slice
-* Arc stroke color
-* Arc stroke width
 * Tooltip

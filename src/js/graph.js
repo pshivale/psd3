@@ -28,7 +28,10 @@ psd3.Graph = function(config) {
         colors: d3.scale.category20(),
         labelColor: "black",
         drilldownTransition: "linear",
-        drilldownTransitionDuration: 0
+        drilldownTransitionDuration: 0,
+        stroke: "white",
+        strokeWidth: 2,
+        highlightColor: "orange"
     };
     /*console.log("before defaults");
     for(var property in config){

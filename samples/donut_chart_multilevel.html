@@ -160,7 +160,12 @@
             donutRadius: 20,
             gradient: true,
             colors: d3.scale.category20(),
-            labelColor: "white"
+            labelColor: "white",
+            stroke: "#eee",
+            strokeWidth: 3,
+            drilldownTransition: "linear",
+            drilldownTransitionDuration: 1000,
+            highlightColor: "#c00"
         };
         var samplePie = new psd3.Pie(config);
     </script>

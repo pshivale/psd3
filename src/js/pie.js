@@ -56,9 +56,13 @@ psd3.Pie.prototype.mouseover = function(d) {
         .select("#value")
         .html(_this.config.tooltip(d.data, _this.config.label));
     d3.select("#" + _this.tooltipId).classed("psd3Hidden", false);
+    d3.select(d.path)
+        .style("fill", _this.config.highlightColor);
 };
-psd3.Pie.prototype.mouseout = function() {
+psd3.Pie.prototype.mouseout = function(d) {
     d3.select("#" + _this.tooltipId).classed("psd3Hidden", true);
+    d3.select(d.path)
+        .style("fill", d.fill);
 };
 
 psd3.Pie.prototype.drawPie = function(dataset) {
@@ -161,6 +165,8 @@ psd3.Pie.prototype.draw = function(svg, totalRadius, dataset, originalDataset, o
     var clazz = "arc" + _this.arcIndex;
 
     var storeMetadataWithArc = function(d) {
+        d.path = this;
+        d.fill = this.fill;
         d.arc = arc;
         d.length = dataset.length;
     };
@@ -207,7 +213,9 @@ psd3.Pie.prototype.draw = function(svg, totalRadius, dataset, originalDataset, o
     //Draw arc paths
     var paths = arcs.append("path")
         //.attr("fill", color(_this.arcIndex));
-        .attr("fill", "url(#gradient_" + _this.arcIndex + ")");
+        .attr("fill", "url(#gradient_" + _this.arcIndex + ")")
+        .style("stroke", _this.config.stroke)
+        .style("stroke-width", _this.config.strokeWidth);
 
     paths.on("mouseover", _this.mouseover);
 
@@ -259,8 +267,6 @@ psd3.Pie.prototype.draw = function(svg, totalRadius, dataset, originalDataset, o
 
 
 };
-
-
 
 psd3.Pie.prototype.reDrawPie = function(d, ds) {
     var tmp = [];
