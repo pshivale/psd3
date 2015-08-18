@@ -103,8 +103,8 @@ psd3.Pie.prototype.setHeading = function() {
 
 psd3.Pie.prototype.mouseover = function(d) {
     d3.select("#" + _this.tooltipId)
-        .style("left", d3.event.clientX + "px")
-        .style("top", d3.event.clientY + "px")
+        .style("left", (d3.event.clientX  + d3.select("body")[0][0].scrollLeft)+ "px")
+        .style("top", (d3.event.clientY  + d3.select("body")[0][0].scrollTop) + "px")
         .select("#value")
         .html(_this.config.tooltip(d.data, _this.config.label));
     d3.select("#" + _this.tooltipId).classed("psd3Hidden", false);

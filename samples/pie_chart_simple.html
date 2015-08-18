@@ -1,61 +1,64 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-	<meta charset="UTF-8">
-	<title>psd3 - Simple Multi-level Pie Chart</title>
-	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-	<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-	<script type="text/javascript" src=".https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <meta charset="UTF-8">
+    <title>psd3 - Simple Multi-level Pie Chart</title>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src=".https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
 
-	<script type="text/javascript" src="../psd3.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="../psd3.min.css"/>
+    <script type="text/javascript" src="../psd3.js"></script>
+    <link rel="stylesheet" type="text/css" href="../psd3.css" />
 </head>
+
 <body style="margin: 15px;">
 
-<div class="container">
-	<div class="well">
-		<h2><a href="../index.html">psd3</a> - Simple Pie Chart</h2>
-		<ul>
-			<li><a href="https://github.com/pshivale/psd3/blob/gh-pages/samples/pie_chart_simple.html">View source on github</a></li>
-			<li>Double click a section to drill down!</li>
-		  	<li>Double click center section to drill back up!</li>
-		</ul>
-	</div>
+    <div class="container">
+        <div class="well">
+            <h2><a href="../index.html">psd3</a> - Simple Pie Chart</h2>
+            <ul>
+                <li><a href="https://github.com/pshivale/psd3/blob/gh-pages/samples/pie_chart_simple.html">View source on github</a></li>
+                <li>Double click a section to drill down!</li>
+                <li>Double click center section to drill back up!</li>
+            </ul>
+        </div>
 
-	<div id="chartContainer" class="well"></div>	
-</div>
+        <div id="chartContainer" class="well"></div>
+    </div>
 
 
-<script type="text/javascript">
-	var config = {
-		containerId: "chartContainer",
-		data: [{
-		    value: 25,
-		    label: "Maharashtra",
-		    inner: [{
-		        value: 15,
-		        label: "Pune"
-		    }, {
-		        value: 10,
-		        label: "Mumbai"
-		    }]
-		}, {
-		    value: 50,
-		    label: "Gujarat",
-		    inner: [{
-		        value: 20,
-		        label: "Surat"
-		    }, {
-		        value: 30,
-		        label: "Rajkot"
-		    }]
-		}],
-	};
+    <script type="text/javascript">
+        var config = {
+            containerId: "chartContainer",
+            data: [{
+                value: 25,
+                label: "Maharashtra",
+                inner: [{
+                    value: 15,
+                    label: "Pune"
+                }, {
+                    value: 10,
+                    label: "Mumbai"
+                }]
+            }, {
+                value: 50,
+                label: "Gujarat",
+                inner: [{
+                    value: 20,
+                    label: "Surat"
+                }, {
+                    value: 30,
+                    label: "Rajkot"
+                }]
+            }],
+        };
 
-	var samplePie = new psd3.Pie(config);
-</script>
+        var samplePie = new psd3.Pie(config);
+    </script>
 
 </body>
+
 </html>
