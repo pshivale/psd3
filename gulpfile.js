@@ -5,6 +5,7 @@ var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
 var concat = require('gulp-concat');
 var prettify = require('gulp-jsbeautifier');
+var Server = require('karma').Server;
 
 gulp.task('default', ['lint','maxCss','maxJs','minCss','minJs', 'format-js','prettify-html','prettify-css']);
 
@@ -66,4 +67,14 @@ gulp.task('prettify-css', function() {
   gulp.src('src/**/*.css')
     .pipe(prettify({indentSize: 4}))
     .pipe(gulp.dest('src'))
+});
+
+/**
+ * Run test once and exit
+ */
+gulp.task('test', function (done) {
+  new Server({
+    configFile: __dirname + '/karma.conf.js',
+    singleRun: true
+  }, done).start();
 });
