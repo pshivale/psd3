@@ -153,8 +153,7 @@ psd3 should work with the latest [d3.js](http://d3js.org/) version 3.5.3 and lat
     highlightColor: "#c00"
 }
 ```
-### Style
+### MIT Licensed
 
-You can change the style of some of the elements of the chart in psd3.css
+Find full text [here](https://github.com/pshivale/psd3/blob/master/LICENSE.md)
 
-* Tooltip
