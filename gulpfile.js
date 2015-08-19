@@ -54,7 +54,11 @@ gulp.task('copyDemos', function() {
 gulp.task('format-js', function() {
   gulp.src('src/**/*.js')
     .pipe(prettify({indentSize: 4, mode: 'VERIFY_AND_WRITE'}))
-    .pipe(gulp.dest('src'))
+    .pipe(gulp.dest('src'));
+
+  gulp.src('spec/**/*.js')
+    .pipe(prettify({indentSize: 4, mode: 'VERIFY_AND_WRITE'}))
+    .pipe(gulp.dest('spec'))
 });
 
 gulp.task('prettify-html', function() {

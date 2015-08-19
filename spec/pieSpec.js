@@ -1,10 +1,10 @@
-describe("Graph Test Suite", function() {
+describe("Pie Test Suite", function() {
     it("costructor works", function() {
-        expect(new psd3.Graph({})).not.toBe(null);
+        expect(new psd3.Pie({})).not.toBe(null);
     });
 
     it("defaults are set", function() {
-        var graph = new psd3.Graph({});
+        var graph = new psd3.Pie({});
         expect(graph.config.width).toBe(400);
         expect(graph.config.height).toBe(400);
         expect(graph.config.value).toBe("value");
@@ -38,7 +38,7 @@ describe("Graph Test Suite", function() {
             strokeWidth: 5,
             highlightColor: "green"
         };
-        var graph = new psd3.Graph(config);
+        var graph = new psd3.Pie(config);
         expect(graph.config.width).toBe(500);
         expect(graph.config.height).toBe(500);
         expect(graph.config.value).toBe("myValue");
@@ -53,5 +53,61 @@ describe("Graph Test Suite", function() {
         expect(graph.config.stroke).toBe("red");
         expect(graph.config.strokeWidth).toBe(5);
         expect(graph.config.highlightColor).toBe("green");
-    })
+    });
+
+    it("finds Max Depth", function() {
+        var dataset = [{
+            value: 1,
+            inner: [{
+                value: 2,
+                inner: [{
+                    value: 3
+                }]
+            }]
+        }, {
+            value: 1,
+            inner: [{
+                value: 2,
+                inner: [{
+                    value: 3,
+                    inner: [{
+                        value: 4
+                    }]
+                }]
+            }]
+        }];
+        expect(new psd3.Pie({}).findMaxDepth(dataset)).toBe(4);
+    });
+
+    it("draws simple multi-level pie", function() {
+        d3.select("body").append("div").attr("id", "chartContainer");
+        var config = {
+            containerId: "chartContainer",
+            data: [{
+                value: 25,
+                label: "Maharashtra",
+                inner: [{
+                    value: 15,
+                    label: "Pune"
+                }, {
+                    value: 10,
+                    label: "Mumbai"
+                }]
+            }, {
+                value: 50,
+                label: "Gujarat",
+                inner: [{
+                    value: 20,
+                    label: "Surat"
+                }, {
+                    value: 30,
+                    label: "Rajkot"
+                }]
+            }],
+        };
+
+        var samplePie = new psd3.Pie(config);
+        expect(d3.select("#chartContainer_svg")).not.toBe(undefined);
+    });
+
 });
