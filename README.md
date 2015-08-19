@@ -153,7 +153,7 @@ psd3 should work with the latest [d3.js](http://d3js.org/) version 3.5.3 and lat
     highlightColor: "#c00"
 }
 ```
-### MIT Licensed
+## MIT Licensed
 
 Find full text [here](https://github.com/pshivale/psd3/blob/master/LICENSE.md)
 
