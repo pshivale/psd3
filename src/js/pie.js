@@ -247,7 +247,16 @@ psd3.Pie.prototype.draw = function(svg, totalRadius, dataset, originalDataset, o
             var a = [];
             a[0] = arc.centroid(d)[0] - parentCentroid[0];
             a[1] = arc.centroid(d)[1] - parentCentroid[1];
-            return "translate(" + a + ")";
+            var rotate = "";
+            if (_this.config.rotateLabel === true) {
+                var rotateAngle = (d.endAngle + d.startAngle) / 2 * (180 / Math.PI) + 90;
+                //console.log("rotateAngle = " + rotateAngle);
+                var b = [];
+                b[0] = parentCentroid[0];
+                b[1] = parentCentroid[1];
+                rotate = "rotate( " + rotateAngle + ", " + b + ")";
+            }
+            return "translate(" + a + ")" + rotate;
         })
         .attr("text-anchor", "middle")
         .text(_this.textText)

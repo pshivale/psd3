@@ -31,7 +31,8 @@ psd3.Graph = function(config) {
         drilldownTransitionDuration: 0,
         stroke: "white",
         strokeWidth: 2,
-        highlightColor: "orange"
+        highlightColor: "orange",
+        rotateLabel: false
     };
     /*console.log("before defaults");
     for(var property in config){
