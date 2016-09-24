@@ -150,7 +150,11 @@ psd3 should work with the latest [d3.js](http://d3js.org/) version 3.5.3 and lat
 
     // highlight color of pie slice when mouse over
     // default is orange
-    highlightColor: "#c00"
+    highlightColor: "#c00",
+    
+    // rotate the label along the arc of the pie slice
+    // default is false
+    rotateLabel: true
 }
 ```
 ## MIT Licensed
